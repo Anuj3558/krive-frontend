@@ -9,6 +9,7 @@ import ShopPage from './components/pages/shop/ShopPage';
 import CustomizationPage from './components/customization/Customization';
 import NotFoundPage from './components/pages/NotFoundPage';
 import Footer from "./components/ui/Footer"
+import Dashboard from './components/pages/Dashboard/Dashboard';
 // Page Transition Wrapper Component
 const PageTransition = ({ children }) => {
   return (
@@ -30,7 +31,7 @@ const LoadingScreenWithRedirect = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/home');
-    }, 3000);
+    }, 5000);
     return () => clearTimeout(timer);
   }, [navigate]);
 
@@ -107,7 +108,21 @@ const AppContent = () => {
             </PageTransition>
           }
         />
-
+  <Route
+          path="/dashboard"
+          element={
+            <PageTransition>
+              <Helmet>
+                <title>Shop - Krive</title>
+                <meta
+                  name="description"
+                  content="Shop the latest fashion trends at Krive."
+                />
+              </Helmet>
+              <Dashboard />
+            </PageTransition>
+          }
+        />
         <Route
           path="/customization"
           element={

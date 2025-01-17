@@ -1,52 +1,93 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {  Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Helmet } from 'react-helmet'; // Added Helmet for SEO
 import { hero1 } from '../../../asstes';
 
+// Updated product structure to match the MongoDB schema
 const products = [
   {
-    id: 1,
+    id: '1',
+    name: 'Classic Shirt',
+    price: 29.99,
+    image: hero1,
+    isNew: true,
+    category: 'Men',
+    customizationOptions: [
+      {
+        name: 'Color',
+        options: [
+          { name: 'White', price: 0, image: hero1 },
+          { name: 'Blue', price: 2, image: hero1 }
+        ]
+      },
+      {
+        name: 'Size',
+        options: [
+          { name: 'S', price: 0, image: hero1 },
+          { name: 'M', price: 0, image: hero1 },
+          { name: 'L', price: 2, image: hero1 }
+        ]
+      }
+    ]
+  },
+  {
+    id: '2',
     name: 'Esprit Ruffle Shirt',
     price: 16.64,
     image: hero1,
     isNew: true,
     category: 'Women',
-    customizationOptions: {
-      Material: {
-        Cotton: { price: '+₹1000' },
-        Silk: { price: '+₹2000' },
-        Linen: { price: '+₹1500' }
+    customizationOptions: [
+      {
+        name: 'Material',
+        options: [
+          { name: 'Cotton', price: 0, image: hero1 },
+          { name: 'Silk', price: 20, image: hero1 },
+          { name: 'Linen', price: 15, image: hero1 }
+        ]
       },
-      Sleeve: {
-        'Full Sleeve': { price: '+₹200' },
-        'Half Sleeve': { price: '+₹150' },
-        'Sleeveless': { price: '+₹100' }
+      {
+        name: 'Sleeve',
+        options: [
+          { name: 'Full Sleeve', price: 2, image: hero1 },
+          { name: 'Half Sleeve', price: 1.5, image: hero1 },
+          { name: 'Sleeveless', price: 1, image: hero1 }
+        ]
       },
-      Neck: {
-        'Round Neck': { price: '+₹100' },
-        'V-Neck': { price: '+₹100' },
-        'Collar': { price: '+₹150' }
+      {
+        name: 'Neck',
+        options: [
+          { name: 'Round Neck', price: 1, image: hero1 },
+          { name: 'V-Neck', price: 1, image: hero1 },
+          { name: 'Collar', price: 1.5, image: hero1 }
+        ]
       }
-    }
+    ]
   },
   {
-    id: 2,
+    id: '3',
     name: 'Casual T-Shirt',
     price: 12.99,
     image: hero1,
     isNew: false,
     category: 'Men',
-    customizationOptions: {
-      Material: {
-        Cotton: { price: '+₹1000' },
-        Polyester: { price: '+₹800' }
+    customizationOptions: [
+      {
+        name: 'Material',
+        options: [
+          { name: 'Cotton', price: 0, image: hero1 },
+          { name: 'Polyester', price: 2, image: hero1 }
+        ]
       },
-      Sleeve: {
-        'Full Sleeve': { price: '+₹200' },
-        'Half Sleeve': { price: '+₹150' }
+      {
+        name: 'Sleeve',
+        options: [
+          { name: 'Full Sleeve', price: 2, image: hero1 },
+          { name: 'Half Sleeve', price: 1.5, image: hero1 }
+        ]
       }
-    }
+    ]
   }
 ];
 
@@ -57,6 +98,12 @@ const ShopPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState({});
+  const [orderForm, setOrderForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    location: ''
+  });
 
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -115,6 +162,25 @@ const ShopPage = () => {
     }));
   };
 
+  const handleOrderFormChange = (e) => {
+    setOrderForm(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handlePlaceOrder = () => {
+    // Here you would typically send the order data to your backend
+    console.log('Order placed:', {
+      user: orderForm,
+      product: selectedProduct,
+      selectedOptions
+    });
+    // Reset form and close popover
+    setOrderForm({ name: '', email: '', phone: '', location: '' });
+    setSelectedProduct(null);
+  };
+
   const ImageCard = ({ title, image, isSelected, onClick, price }) => (
     <motion.div 
       onClick={onClick}
@@ -150,7 +216,10 @@ const ShopPage = () => {
   return (
     <section className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-32">
       {/* Helmet for SEO */}
-      
+      <Helmet>
+        <title>Shop Page</title>
+        <meta name="description" content="Shop our amazing products!" />
+      </Helmet>
 
       <motion.h1
         initial={{ opacity: 0, y: 20 }}
@@ -163,7 +232,7 @@ const ShopPage = () => {
       {/* Category Filters and Search */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
         <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-          {['All Products', 'Women', 'Men'].map((category) => (
+          {['All Products', 'Men', 'Women', 'Kids'].map((category) => (
             <motion.button
               key={category}
               onClick={() => setActiveCategory(category)}
@@ -332,31 +401,69 @@ const ShopPage = () => {
                   <h2 className="text-xl sm:text-2xl font-bold mb-4">{selectedProduct.name}</h2>
                   <p className="text-lg sm:text-xl font-semibold mb-6">${selectedProduct.price.toFixed(2)}</p>
                   <div className="space-y-6">
-                    {Object.entries(selectedProduct.customizationOptions).map(([category, options]) => (
-                      <div key={category}>
-                        <h3 className="font-medium mb-2">{category}</h3>
+                    {selectedProduct.customizationOptions.map((category) => (
+                      <div key={category.name}>
+                        <h3 className="font-medium mb-2">{category.name}</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {Object.entries(options).map(([optionName, optionData]) => (
-                            <motion.div key={optionName}>
+                          {category.options.map((option) => (
+                            <motion.div key={option.name}>
                               <ImageCard
-                                title={optionName}
-                                image={optionData.image}
-                                price={optionData.price}
-                                isSelected={selectedOptions[category] === optionName}
-                                onClick={() => handleOptionSelect(category, optionName)}
+                                title={option.name}
+                                image={option.image}
+                                price={option.price > 0 ? `+$${option.price.toFixed(2)}` : ''}
+                                isSelected={selectedOptions[category.name] === option.name}
+                                onClick={() => handleOptionSelect(category.name, option.name)}
                               />
                             </motion.div>
                           ))}
                         </div>
                       </div>
                     ))}
-                    <motion.button 
-                      className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      Add to Cart
-                    </motion.button>
+                    <form onSubmit={(e) => { e.preventDefault(); handlePlaceOrder(); }} className="space-y-4">
+                      <input
+                        type="text"
+                        name="name"
+                        value={orderForm.name}
+                        onChange={handleOrderFormChange}
+                        placeholder="Full Name"
+                        className="w-full p-2 border rounded"
+                        required
+                      />
+                      <input
+                        type="email"
+                        name="email"
+                        value={orderForm.email}
+                        onChange={handleOrderFormChange}
+                        placeholder="Email"
+                        className="w-full p-2 border rounded"
+                        required
+                      />
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={orderForm.phone}
+                        onChange={handleOrderFormChange}
+                        placeholder="Phone Number"
+                        className="w-full p-2 border rounded"
+                        required
+                      />
+                      <textarea
+                        name="location"
+                        value={orderForm.location}
+                        onChange={handleOrderFormChange}
+                        placeholder="Delivery Address"
+                        className="w-full p-2 border rounded"
+                        required
+                      ></textarea>
+                      <motion.button 
+                        type="submit"
+                        className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Place Order
+                      </motion.button>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -369,3 +476,4 @@ const ShopPage = () => {
 };
 
 export default ShopPage;
+

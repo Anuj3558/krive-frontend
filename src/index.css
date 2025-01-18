@@ -18,3 +18,52 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+/* styles.css */
+.ant-layout {
+  background: #f0f2f5;
+}
+
+.ant-layout-header {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ant-layout-sider {
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.ant-card {
+  border-radius: 8px;
+}
+
+.ant-form-item-label > label {
+  font-weight: 500;
+}
+
+.ant-upload-list-picture-card .ant-upload-list-item {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ant-btn-primary {
+  background: #1890ff;
+  border-radius: 6px;
+  height: 40px;
+  font-weight: 500;
+}
+
+.ant-list-item {
+  transition: all 0.3s ease;
+}
+
+.ant-list-item:hover {
+  transform: translateY(-2px);
+}
+
+.ant-collapse {
+  background: #fff;
+  border-radius: 8px;
+}
+
+.ant-collapse-header {
+  font-weight: 500;
+}

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sidebar } from './components/Slidebar';
-import { AddCategorySection } from './components/Addcategory';
-import { AddCustomizationSection } from './components/AddCustomizationSection';
-import { AddProductSection } from './components/AddProductSection';
-import { AddSubcategorySection } from './components/AddSubcategorySection';
+import  AddCategorySection  from './components/Addcategory';
+import AddCustomizationSection from './components/AddCustomizationSection';
+import  {AddProductSection} from "./components/AddProductSection"
+import  AddSubcategorySection  from './components/AddSubcategorySection';
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState('dashboard');

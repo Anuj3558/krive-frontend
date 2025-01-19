@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sidebar } from './components/Slidebar';
 import  AddCategorySection  from './components/Addcategory';
@@ -6,10 +6,19 @@ import AddCustomizationSection from './components/AddCustomizationSection';
 import  {AddProductSection} from "./components/AddProductSection"
 import  AddSubcategorySection  from './components/AddSubcategorySection';
 import DashboardOverview from './DashboardIveriew';
-
+import Cookies from "js-cookie"
+import { useNavigate } from 'react-router-dom';
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [isOpen, setIsOpen] = useState(true);
+  const navigate = useNavigate()
+  useEffect(() => {
+    const token = Cookies.get('token');
+
+    if (!token) {
+      navigate('/login'); // Redirect to login page if token is not present
+    }
+  }, [navigate]);
 
   return (
     <div className="flex min-h-screen bg-gray-100 ">

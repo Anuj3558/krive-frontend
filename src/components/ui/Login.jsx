@@ -18,7 +18,7 @@ export default function AuthPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const url = isLogin ? '/login' : '/register';
+    const url = isLogin ? '/admin/login' : '/register';
     const data = isLogin ? { email, password } : { name, email, password };
 
     try {

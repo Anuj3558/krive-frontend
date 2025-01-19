@@ -6,23 +6,24 @@ import LoadingScreen from './components/ui/LogoAnimaiton';
 import Navbar from './components/ui/Navbar';
 import HomePage from './components/pages/home/Homepage';
 import ShopPage from './components/pages/shop/ShopPage';
+import Aboutus from './components/pages/aboutus/Aboutus';
 import CustomizationPage from './components/customization/Customization';
 import NotFoundPage from './components/pages/NotFoundPage';
-import Footer from "./components/ui/Footer"
+import Footer from './components/ui/Footer';
 import Dashboard from './components/pages/Dashboard/Dashboard';
+import Contact from './components/pages/contact/Contact';
+
 // Page Transition Wrapper Component
-const PageTransition = ({ children }) => {
-  return (
-    <div
-      className="transition-all duration-500 ease-in-out transform"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-    >
-      {children}
-    </div>
-  );
-};
+const PageTransition = ({ children }) => (
+  <div
+    className="transition-all duration-500 ease-in-out transform"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+  >
+    {children}
+  </div>
+);
 
 // Loading Screen with enhanced transitions
 const LoadingScreenWithRedirect = () => {
@@ -38,7 +39,6 @@ const LoadingScreenWithRedirect = () => {
   return (
     <div className="fixed inset-0 z-50 bg-white">
       <LoadingScreen />
-
     </div>
   );
 };
@@ -55,7 +55,6 @@ const AppContent = () => {
           name="description"
           content="Krive offers the best online tailor and darzi services in Indore."
         />
-        {/* ... rest of your Helmet content ... */}
       </Helmet>
 
       <Navbar />
@@ -76,7 +75,6 @@ const AppContent = () => {
             </>
           }
         />
-
         <Route
           path="/home"
           element={
@@ -92,7 +90,6 @@ const AppContent = () => {
             </PageTransition>
           }
         />
-
         <Route
           path="/shop"
           element={
@@ -108,15 +105,45 @@ const AppContent = () => {
             </PageTransition>
           }
         />
-  <Route
+        <Route
+          path="/aboutus"
+          element={
+            <PageTransition>
+              <Helmet>
+                <title>About Us - Krive</title>
+                <meta
+                  name="description"
+                  content="Learn more about Krive and our mission to deliver customizable fashion tailored to your needs."
+                />
+              </Helmet>
+              <Aboutus />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <PageTransition>
+              <Helmet>
+                <title>Contact Us - Krive</title>
+                <meta
+                  name="description"
+                  content="Get in touch with us for inquiries, support, or general questions."
+                />
+              </Helmet>
+              <Contact />
+            </PageTransition>
+          }
+        />
+        <Route
           path="/dashboard"
           element={
             <PageTransition>
               <Helmet>
-                <title>Shop - Krive</title>
+                <title>Dashboard - Krive</title>
                 <meta
                   name="description"
-                  content="Shop the latest fashion trends at Krive."
+                  content="Access your personal dashboard for managing your orders and preferences."
                 />
               </Helmet>
               <Dashboard />
@@ -138,7 +165,6 @@ const AppContent = () => {
             </PageTransition>
           }
         />
-
         <Route
           path="*"
           element={

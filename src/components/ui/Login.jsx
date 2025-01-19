@@ -1,13 +1,40 @@
-'use client'
-
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Mail, Lock, User, ArrowRight } from 'lucide-react'
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Mail, Lock, User, ArrowRight } from 'lucide-react';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function AuthPage() {
-  const [isLogin, setIsLogin] = useState(true)
+  const [isLogin, setIsLogin] = useState(true);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const toggleAuthMode = () => setIsLogin(!isLogin)
+  const toggleAuthMode = () => setIsLogin(!isLogin);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const url = isLogin ? '/login' : '/register';
+    const data = isLogin ? { email, password } : { name, email, password };
+
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}${url}`, data, { withCredentials: true });
+      console.log(response.data.message);
+
+      // Save the token in cookies
+      Cookies.set('token', response.data.token, { expires: 1 }); // Expires in 1 day
+
+      // Redirect to dashboard after successful login/registration
+      navigate('/dashboard');
+    } catch (error) {
+      setError(error.response?.data?.message || 'Authentication failed. Please try again.');
+      console.error('Authentication failed:', error.response?.data?.message || error.message);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center px-4 sm:px-6 lg:px-8">
@@ -17,7 +44,7 @@ export default function AuthPage() {
             {isLogin ? 'Sign in to your account' : 'Create a new account'}
           </h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             {!isLogin && (
               <div>
@@ -31,6 +58,8 @@ export default function AuthPage() {
                     name="name"
                     type="text"
                     required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm pl-10"
                     placeholder="Full Name"
                   />
@@ -49,6 +78,8 @@ export default function AuthPage() {
                   type="email"
                   autoComplete="email"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 ${
                     isLogin ? 'rounded-t-md' : ''
                   } focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm pl-10`}
@@ -68,12 +99,16 @@ export default function AuthPage() {
                   type="password"
                   autoComplete="current-password"
                   required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm pl-10"
                   placeholder="Password"
                 />
               </div>
             </div>
           </div>
+
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <div>
             <motion.button
@@ -97,6 +132,5 @@ export default function AuthPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

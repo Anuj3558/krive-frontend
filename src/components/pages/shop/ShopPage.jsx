@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
+import OrderSuccess from '../../ui/OrderSucess';
 
 const ShopPage = () => {
   const [searchParams] = useSearchParams();
@@ -24,14 +25,15 @@ const ShopPage = () => {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const ITEMS_PER_PAGE = 8;
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const displayedProducts = products.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
   useEffect(() => {
     if (categoryQuery) {
-      // Find the category from the fetched categories
       const categoryToSelect = categories.find(
         (category) => category.name === decodeURIComponent(categoryQuery)
       );
@@ -41,6 +43,7 @@ const ShopPage = () => {
       }
     }
   }, [categoryQuery, categories]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,18 +57,15 @@ const ShopPage = () => {
         setSubcategories(subcategoriesResponse.data);
         setProducts(productsResponse.data);
 
-        // If there's a name query parameter, find and select the corresponding product
         if (nameQuery) {
           const productToSelect = productsResponse.data.find(
             (product) => product.name === decodeURIComponent(nameQuery)
           );
           if (productToSelect) {
             setSelectedProduct(productToSelect);
-            // If the product has a category, set it as active
             if (productToSelect.category) {
               setActiveCategory(productToSelect.category.name);
               setSelectedCategory(productToSelect.category);
-              // If the product has a subcategory, set it as selected
               if (productToSelect.subcategory) {
                 setSelectedSubcategory(productToSelect.subcategory);
               }
@@ -150,7 +150,6 @@ const ShopPage = () => {
     }
 
     try {
-      // Get user's current location using Geolocation API
       const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(
           resolve,
@@ -164,7 +163,6 @@ const ShopPage = () => {
 
       const { latitude, longitude } = position.coords;
 
-      // Prepare the order data
       const orderData = {
         productId: selectedProduct._id,
         selectedOptions,
@@ -175,17 +173,15 @@ const ShopPage = () => {
         },
       };
 
-      // Send the order data to the backend
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/client/placeorder`,
         orderData
       );
 
-      // Handle the response (e.g., show a success message)
       if (response.status === 200) {
-        alert('Order placed successfully!');
         setOrderForm({ name: '', email: '', phone: '', location: '' });
         setSelectedProduct(null);
+        setShowSuccess(true);
       }
     } catch (error) {
       console.error('Error placing order:', error);
@@ -239,7 +235,6 @@ const ShopPage = () => {
           SHOP
         </motion.h1>
 
-        {/* Category and Subcategory Filters */}
         <div className="flex flex-col w-full gap-4 mb-8">
           <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2">
             <motion.button
@@ -279,7 +274,6 @@ const ShopPage = () => {
             ))}
           </div>
 
-          {/* Subcategories */}
           <AnimatePresence>
             {selectedCategory && (
               <motion.div
@@ -310,7 +304,6 @@ const ShopPage = () => {
           </AnimatePresence>
         </div>
 
-        {/* Product Grid */}
         <motion.div
           layout
           className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
@@ -366,7 +359,6 @@ const ShopPage = () => {
             ))}
         </motion.div>
 
-        {/* Pagination */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -409,7 +401,6 @@ const ShopPage = () => {
           </motion.button>
         </motion.div>
 
-        {/* Product Customization Modal */}
         <AnimatePresence>
           {selectedProduct && (
             <motion.div
@@ -523,6 +514,11 @@ const ShopPage = () => {
           )}
         </AnimatePresence>
       </section>
+      <AnimatePresence>
+        {showSuccess && (
+          <OrderSuccess onClose={() => setShowSuccess(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

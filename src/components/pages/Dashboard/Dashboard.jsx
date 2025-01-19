@@ -5,13 +5,14 @@ import  AddCategorySection  from './components/Addcategory';
 import AddCustomizationSection from './components/AddCustomizationSection';
 import  {AddProductSection} from "./components/AddProductSection"
 import  AddSubcategorySection  from './components/AddSubcategorySection';
+import DashboardOverview from './DashboardIveriew';
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className="flex min-h-screen bg-gray-100 mt-16">
+    <div className="flex min-h-screen bg-gray-100 ">
       <Sidebar
         activeSection={activeSection}
         setActiveSection={setActiveSection}
@@ -28,8 +29,7 @@ const Dashboard = () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <h1 className="text-2xl font-bold mb-4">Dashboard Overview</h1>
-              <p>Welcome to the admin dashboard. Use the sidebar to manage categories, products, and more.</p>
+             <DashboardOverview />
             </motion.div>
           )}
 

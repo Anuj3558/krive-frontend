@@ -47,7 +47,7 @@ const ProductCard = ({ title, subtitle, image, isLarge = false, delay = 0, price
           </motion.p>
        
         </div>
-        <motion.button
+      <a href='/shop'>        <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: delay + 0.4 }}
@@ -55,6 +55,8 @@ const ProductCard = ({ title, subtitle, image, isLarge = false, delay = 0, price
         >
           SHOP NOW
         </motion.button>
+        </a>
+
       </div>
     </motion.div>
   )
@@ -65,17 +67,14 @@ export default function ProductCategories() {
     <section className="container mx-auto px-4 py-16">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <ProductCard
-          title="Designer Kurta Set"
-          subtitle="Elegant Embroidered Collection"
-          price="2,999"
+          title="Designer Kurta"
           isLarge
           delay={0}
           image={FeatureKurta}
         />
         <ProductCard
-          title="Pleated Skirts"
-          subtitle="Contemporary Style"
-          price="1,499"
+          title="Western Dress"
+        
           isLarge
           delay={0.2}
           image={featurePlatedSkirt}
@@ -84,22 +83,19 @@ export default function ProductCategories() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <ProductCard
           title="Kids' Party Wear"
-          subtitle="Festive Collection"
-          price="1,999"
+         
           delay={0.4}
           image={featureKidsParty}
         />
         <ProductCard
           title="Traditional Lehenga"
-          subtitle="Wedding Collection"
-          price="4,999"
+         
           delay={0.5}
           image={TraditionalLengh}
         />
         <ProductCard
           title="Cotton Palazzo Set"
-          subtitle="Summer Comfort"
-          price="1,299"
+        
           delay={0.6}
           image={FeaturePlazo}
         />

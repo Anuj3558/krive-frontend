@@ -3,7 +3,11 @@ import { Helmet } from "react-helmet";
 import HeroSection from "./components/Hero";
 import ProductCategories from "./components/Categories";
 import ProductOverview from "./components/Overview";
-import TestimonialCarousel from "./components/Testimonal";
+import ReviewForm from "./components/Review";
+import { Cat, Workflow } from "lucide-react";
+import WorkflowSection from "./components/WorkFlowSection";
+import ReviewsMarquee from "./components/reelsSection";
+import CTAButton from "./components/CTA";
 
 const HomePage = () => {
   return (
@@ -31,9 +35,13 @@ const HomePage = () => {
 
       <div className="">
         <HeroSection />
+       
         <ProductCategories />
+        <WorkflowSection />
         <ProductOverview />
-        <TestimonialCarousel />
+    <ReviewsMarquee />
+    <CTAButton />
+      
         {/* Add other components as needed */}
       </div>
     </>

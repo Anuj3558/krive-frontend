@@ -12,20 +12,56 @@ import NotFoundPage from './components/pages/NotFoundPage';
 import Footer from './components/ui/Footer';
 import Dashboard from './components/pages/Dashboard/Dashboard';
 import Contact from './components/pages/contact/Contact';
+import { LogIn } from 'lucide-react';
+import AuthPage from './components/ui/Login';
 
-// Page Transition Wrapper Component
-const PageTransition = ({ children }) => (
-  <div
-    className="transition-all duration-500 ease-in-out transform"
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -20 }}
+// Loading Animation Component
+const PageLoadingAnimation = () => (
+  <motion.div
+    initial={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    className="fixed inset-0 z-50 flex items-center justify-center bg-white"
   >
-    {children}
-  </div>
+    <div className="flex flex-col items-center">
+      <div className="w-16 h-16 border-4 border-[#5f60b9] border-t-transparent rounded-full animate-spin"></div>
+      <p className='text-[#5f60b9]'>Krive</p>
+      <span className="mt-4 text-xl font-semibold text-[#5f60b9]">Loading...</span>
+    </div>
+  </motion.div>
 );
 
-// Loading Screen with enhanced transitions
+// Enhanced Page Transition Wrapper Component
+const PageTransition = ({ children }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000); // 1 second loading animation
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <AnimatePresence mode="wait">
+      {isLoading ? (
+        <PageLoadingAnimation key="loading" />
+      ) : (
+        <motion.div
+          key="content"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          {children}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 const LoadingScreenWithRedirect = () => {
   const navigate = useNavigate();
 
@@ -43,7 +79,6 @@ const LoadingScreenWithRedirect = () => {
   );
 };
 
-// ScrollToTop component
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -57,9 +92,9 @@ const ScrollToTop = () => {
   return null;
 };
 
-// Main content component that uses location
 const AppContent = () => {
   const location = useLocation();
+  const isDashboard = location.pathname === '/dashboard' || location.pathname === '/login';
 
   return (
     <div className="App relative">
@@ -72,137 +107,150 @@ const AppContent = () => {
         />
       </Helmet>
 
-      <Navbar />
+      {!isDashboard && <Navbar />}
 
-      <Routes location={location} key={location.pathname}>
-        <Route
-          path="/"
-          element={
-            <>
-              <Helmet>
-                <title>Loading - Krive</title>
-                <meta
-                  name="description"
-                  content="Welcome to Krive. Please wait while we load your experience."
-                />
-              </Helmet>
-              <LoadingScreenWithRedirect />
-            </>
-          }
-        />
-        <Route
-          path="/home"
-          element={
-            <PageTransition>
-              <Helmet>
-                <title>Home - Krive</title>
-                <meta
-                  name="description"
-                  content="Welcome to Krive, your one-stop destination for customisable and personalised fashion."
-                />
-              </Helmet>
-              <HomePage />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/shop"
-          element={
-            <PageTransition>
-              <Helmet>
-                <title>Shop - Krive</title>
-                <meta
-                  name="description"
-                  content="Shop the latest fashion trends at Krive."
-                />
-              </Helmet>
-              <ShopPage />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/aboutus"
-          element={
-            <PageTransition>
-              <Helmet>
-                <title>About Us - Krive</title>
-                <meta
-                  name="description"
-                  content="Learn more about Krive and our mission to deliver customizable fashion tailored to your needs."
-                />
-              </Helmet>
-              <Aboutus />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/contact"
-          element={
-            <PageTransition>
-              <Helmet>
-                <title>Contact Us - Krive</title>
-                <meta
-                  name="description"
-                  content="Get in touch with us for inquiries, support, or general questions."
-                />
-              </Helmet>
-              <Contact />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <PageTransition>
-              <Helmet>
-                <title>Dashboard - Krive</title>
-                <meta
-                  name="description"
-                  content="Access your personal dashboard for managing your orders and preferences."
-                />
-              </Helmet>
-              <Dashboard />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/customization"
-          element={
-            <PageTransition>
-              <Helmet>
-                <title>Customization - Krive</title>
-                <meta
-                  name="description"
-                  content="Customise your clothing with Krive."
-                />
-              </Helmet>
-              <CustomizationPage />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <PageTransition>
-              <Helmet>
-                <title>Page Not Found - Krive</title>
-                <meta
-                  name="description"
-                  content="The page you are looking for does not exist."
-                />
-              </Helmet>
-              <NotFoundPage />
-            </PageTransition>
-          }
-        />
-      </Routes>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route
+            path="/"
+            element={
+              <>
+                <Helmet>
+                  <title>Loading - Krive</title>
+                  <meta
+                    name="description"
+                    content="Welcome to Krive. Please wait while we load your experience."
+                  />
+                </Helmet>
+                <LoadingScreenWithRedirect />
+              </>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <PageTransition>
+                <Helmet>
+                  <title>Home - Krive</title>
+                  <meta
+                    name="description"
+                    content="Welcome to Krive, your one-stop destination for customisable and personalised fashion."
+                  />
+                </Helmet>
+                <HomePage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/shop"
+            element={
+              <PageTransition>
+                <Helmet>
+                  <title>Shop - Krive</title>
+                  <meta
+                    name="description"
+                    content="Shop the latest fashion trends at Krive."
+                  />
+                </Helmet>
+                <ShopPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/aboutus"
+            element={
+              <PageTransition>
+                <Helmet>
+                  <title>About Us - Krive</title>
+                  <meta
+                    name="description"
+                    content="Learn more about Krive and our mission to deliver customizable fashion tailored to your needs."
+                  />
+                </Helmet>
+                <Aboutus />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <PageTransition>
+                <Helmet>
+                  <title>Contact Us - Krive</title>
+                  <meta
+                    name="description"
+                    content="Get in touch with us for inquiries, support, or general questions."
+                  />
+                </Helmet>
+                <Contact />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <PageTransition>
+                <Helmet>
+                  <title>Dashboard - Krive</title>
+                  <meta
+                    name="description"
+                    content="Access your personal dashboard for managing your orders and preferences."
+                  />
+                </Helmet>
+                <Dashboard />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/customization"
+            element={
+              <PageTransition>
+                <Helmet>
+                  <title>Customization - Krive</title>
+                  <meta
+                    name="description"
+                    content="Customise your clothing with Krive."
+                  />
+                </Helmet>
+                <CustomizationPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/Login"
+            element={
+              <PageTransition>
+                <Helmet>
+                  <title>Login Krive</title>
+                 
+                </Helmet>
+                < AuthPage/>
+              </PageTransition>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <PageTransition>
+                <Helmet>
+                  <title>Page Not Found - Krive</title>
+                  <meta
+                    name="description"
+                    content="The page you are looking for does not exist."
+                  />
+                </Helmet>
+                <NotFoundPage />
+              </PageTransition>
+            }
+          />
+        </Routes>
+      </AnimatePresence>
 
-      <Footer />
+      {!isDashboard && <Footer />}
     </div>
   );
 };
 
-// Main App Component
 function App() {
   return (
     <Router>

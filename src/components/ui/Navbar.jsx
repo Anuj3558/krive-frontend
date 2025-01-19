@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, ShoppingCart, X, Heart } from 'lucide-react'
+import { Menu,X, Heart } from 'lucide-react'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -56,10 +56,7 @@ export default function Navbar() {
               whileTap={{ scale: 0.95 }}
               className="relative"
             >
-              <ShoppingCart className="h-6 w-6 text-white" />
-              <span className="absolute -top-2 -right-2 bg-purple-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                2
-              </span>
+              
             </motion.button>
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -79,14 +76,14 @@ export default function Navbar() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'tween' }}
-            className="fixed inset-0 bg-black/95 md:hidden"
+            className="fixed inset-0 bg-black/30 md:hidden"
           >
             <div className="flex justify-end p-4">
               <button onClick={() => setIsOpen(false)}>
                 <X className="h-6 w-6 text-white" />
               </button>
             </div>
-            <div className="flex flex-col items-center space-y-8 pt-8">
+            <div className="flex flex-col items-center bg-black py-3 space-y-8 pt-8">
               {menuItems.map((item) => (
                 <motion.a
                   key={item.name}

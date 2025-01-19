@@ -1,6 +1,110 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Star } from 'lucide-react';
+const ReviewForm = () => {
+  const [formData, setFormData] = useState({
+    author: '',
+    text: '',
+    rating: 5
+  });
+  const [error, setError] = useState('');
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (formData.text.length > 100) {
+      setError('Review text must not exceed 100 characters');
+      return;
+    }
+
+    // Here you would typically make an API call
+    console.log('Form submitted:', formData);
+    
+    // Reset form
+    setFormData({
+      author: '',
+      text: '',
+      rating: 5
+    });
+    setError('');
+    alert('Review submitted successfully!');
+  };
+
+  const StarRating = () => (
+    <div className="flex space-x-2">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <button
+          key={star}
+          type="button"
+          onClick={() => setFormData(prev => ({ ...prev, rating: star }))}
+          className="focus:outline-none"
+        >
+          <Star
+            className={`w-6 h-6 ${
+              star <= formData.rating
+                ? 'fill-yellow-400 text-yellow-400'
+                : 'text-gray-300'
+            }`}
+          />
+        </button>
+      ))}
+    </div>
+  );
+
+  return (
+    <div className="max-w-md justify-start bg-white p-6 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-6">Write a Review</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Your Name
+          </label>
+          <input
+            type="text"
+            value={formData.author}
+            onChange={(e) => setFormData(prev => ({ ...prev, author: e.target.value }))}
+            className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Rating
+          </label>
+          <StarRating />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Your Review (max 100 characters)
+          </label>
+          <textarea
+            value={formData.text}
+            onChange={(e) => setFormData(prev => ({ ...prev, text: e.target.value }))}
+            maxLength={100}
+            className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 h-24"
+            required
+          />
+          <div className="text-sm text-gray-500 mt-1">
+            {formData.text.length}/100 characters
+          </div>
+        </div>
+
+        {error && (
+          <div className="text-red-500 text-sm">{error}</div>
+        )}
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+        >
+          Submit Review
+        </button>
+      </form>
+    </div>
+  );
+};
 const AboutUs = () => {
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -148,11 +252,13 @@ const AboutUs = () => {
             We'd love to hear from you! Whether you have a question about our products, 
             need help with an order, or just want to say hello, don't hesitate to reach out.
           </p>
+<ReviewForm />
           <motion.button
             className="px-8 py-3 bg-blue-600 text-white text-lg font-semibold rounded-full hover:bg-blue-700 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
+
             Get in Touch
           </motion.button>
         </motion.section>

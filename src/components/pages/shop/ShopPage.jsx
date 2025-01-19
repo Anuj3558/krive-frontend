@@ -7,7 +7,7 @@ import { useSearchParams } from 'react-router-dom';
 const ShopPage = () => {
   const [searchParams] = useSearchParams();
   const nameQuery = searchParams.get('name');
-
+  const categoryQuery = searchParams.get('category');
   const [activeCategory, setActiveCategory] = useState('All Products');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -29,7 +29,18 @@ const ShopPage = () => {
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const displayedProducts = products.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
+  useEffect(() => {
+    if (categoryQuery) {
+      // Find the category from the fetched categories
+      const categoryToSelect = categories.find(
+        (category) => category.name === decodeURIComponent(categoryQuery)
+      );
+      if (categoryToSelect) {
+        setActiveCategory(categoryToSelect.name);
+        setSelectedCategory(categoryToSelect);
+      }
+    }
+  }, [categoryQuery, categories]);
   useEffect(() => {
     const fetchData = async () => {
       try {

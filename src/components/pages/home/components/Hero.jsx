@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { hero1, hero2, hero3, heroKid, heroMale, heroWonen } from '../../../../asstes';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const slides = [
     {
@@ -34,18 +36,21 @@ const HeroSection = () => {
   const categories = [
     {
       id: 1,
-      title: "Women's Fashion",
-      image: heroWonen
+      title: "Women's",
+      image: heroWonen,
+      category: "Women's" // Add category value for query parameter
     },
     {
       id: 2,
-      title: "Men's Apparel",
-      image: heroMale
+      title: "Men's",
+      image: heroMale,
+      category: "Men's" // Add category value for query parameter
     },
     {
       id: 3,
-      title: "Kids' Clothing",
-      image: heroKid
+      title: "Kid's",
+      image: heroKid,
+      category: "Kid's" // Add category value for query parameter
     }
   ];
 
@@ -53,7 +58,7 @@ const HeroSection = () => {
     setTimeout(() => setIsLoaded(true), 100);
     const timer = setInterval(handleNext, 5000);
     return () => clearInterval(timer);
-  }, );
+  }, []);
 
   const handleNext = () => {
     if (!isAnimating) {
@@ -69,6 +74,11 @@ const HeroSection = () => {
       setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
       setTimeout(() => setIsAnimating(false), 750);
     }
+  };
+
+  // Function to handle category click
+  const handleCategoryClick = (category) => {
+    navigate(`/shop?category=${encodeURIComponent(category)}`);
   };
 
   return (
@@ -112,15 +122,17 @@ const HeroSection = () => {
             {slides[currentSlide].title}
           </h1>
         </div>
-        <button 
-          className={`bg-black hover:bg-gray-800 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg transition-all duration-400 delay-300 ${
-            isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          } ${
-            isAnimating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
-          }`}
-        >
-          {slides[currentSlide].buttonText}
-        </button>
+        <a href='/shop'>
+          <button 
+            className={`bg-black hover:bg-gray-800 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg transition-all duration-400 delay-300 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            } ${
+              isAnimating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
+            }`}
+          >
+            {slides[currentSlide].buttonText}
+          </button>
+        </a>
       </div>
 
       {/* Category Preview */}
@@ -132,6 +144,7 @@ const HeroSection = () => {
                 key={category.id} 
                 className={`relative h-32 sm:h-40 lg:h-48 group overflow-hidden cursor-pointer transition-all duration-1000`}
                 style={{ transitionDelay: `${1200 + index * 200}ms` }}
+                onClick={() => handleCategoryClick(category.category)} // Add onClick handler
               >
                 <img
                   src={category.image}
@@ -151,31 +164,10 @@ const HeroSection = () => {
       </div>
 
       {/* Navigation Buttons */}
-      <button
-        onClick={handlePrev}
-        className="absolute left-4 sm:left-8 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-300"
-      >
-        <ChevronLeft size={24} />
-      </button>
-      <button
-        onClick={handleNext}
-        className="absolute right-4 sm:right-8 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-300"
-      >
-        <ChevronRight size={24} />
-      </button>
+   
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide ? 'bg-white' : 'bg-white/50'
-            }`}
-          />
-        ))}
-      </div>
+   
     </section>
   );
 };

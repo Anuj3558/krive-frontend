@@ -1,131 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
-import { hero1 } from '../../../asstes';
+import axios from 'axios';
+import { useSearchParams } from 'react-router-dom';
 
-// Categories and products data remain the same as in your original code
-// ... (keep the categories and products arrays as they were)
-const categories = [
-    {
-      name: 'Men',
-      slug: 'men',
-      subcategories: [
-        { name: 'Tops', slug: 'tops' },
-        { name: 'Bottoms', slug: 'bottoms' },
-        { name: 'Outerwear', slug: 'outerwear' },
-        { name: 'Accessories', slug: 'accessories' }
-      ]
-    },
-    {
-      name: 'Women',
-      slug: 'women',
-      subcategories: [
-        { name: 'Tops', slug: 'tops' },
-        { name: 'Bottoms', slug: 'bottoms' },
-        { name: 'Dresses', slug: 'dresses' },
-        { name: 'Accessories', slug: 'accessories' }
-      ]
-    },
-    {
-      name: 'Kids',
-      slug: 'kids',
-      subcategories: [
-        { name: 'Boys', slug: 'boys' },
-        { name: 'Girls', slug: 'girls' },
-        { name: 'Babies', slug: 'babies' },
-        { name: 'Accessories', slug: 'accessories' }
-      ]
-    }
-  ];
-  const products = [
-    {
-      id: '1',
-      name: 'Classic Shirt',
-      price: 29.99,
-      image: hero1,
-      isNew: true,
-      category: 'Men',
-      subcategory: 'Shirts', // Added subcategory
-      customizationOptions: [
-        {
-          name: 'Color',
-          options: [
-            { name: 'White', price: 0, image: hero1 },
-            { name: 'Blue', price: 2, image: hero1 }
-          ]
-        },
-        {
-          name: 'Size',
-          options: [
-            { name: 'S', price: 0, image: hero1 },
-            { name: 'M', price: 0, image: hero1 },
-            { name: 'L', price: 2, image: hero1 }
-          ]
-        }
-      ]
-    },
-    {
-      id: '2',
-      name: 'Esprit Ruffle Shirt',
-      price: 16.64,
-      image: hero1,
-      isNew: true,
-      category: 'Women',
-      subcategory: 'Shirts', // Added subcategory
-      customizationOptions: [
-        {
-          name: 'Material',
-          options: [
-            { name: 'Cotton', price: 0, image: hero1 },
-            { name: 'Silk', price: 20, image: hero1 },
-            { name: 'Linen', price: 15, image: hero1 }
-          ]
-        },
-        {
-          name: 'Sleeve',
-          options: [
-            { name: 'Full Sleeve', price: 2, image: hero1 },
-            { name: 'Half Sleeve', price: 1.5, image: hero1 },
-            { name: 'Sleeveless', price: 1, image: hero1 }
-          ]
-        },
-        {
-          name: 'Neck',
-          options: [
-            { name: 'Round Neck', price: 1, image: hero1 },
-            { name: 'V-Neck', price: 1, image: hero1 },
-            { name: 'Collar', price: 1.5, image: hero1 }
-          ]
-        }
-      ]
-    },
-    {
-      id: '3',
-      name: 'Casual T-Shirt',
-      price: 12.99,
-      image: hero1,
-      isNew: false,
-      category: 'Men',
-      subcategory: 'T-Shirts', // Added subcategory
-      customizationOptions: [
-        {
-          name: 'Material',
-          options: [
-            { name: 'Cotton', price: 0, image: hero1 },
-            { name: 'Polyester', price: 2, image: hero1 }
-          ]
-        },
-        {
-          name: 'Sleeve',
-          options: [
-            { name: 'Full Sleeve', price: 2, image: hero1 },
-            { name: 'Half Sleeve', price: 1.5, image: hero1 }
-          ]
-        }
-      ]
-    }
-  ];
 const ShopPage = () => {
+  const [searchParams] = useSearchParams();
+  const nameQuery = searchParams.get('name');
+
   const [activeCategory, setActiveCategory] = useState('All Products');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -134,18 +16,62 @@ const ShopPage = () => {
     name: '',
     email: '',
     phone: '',
-    location: ''
+    location: '',
   });
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const ITEMS_PER_PAGE = 8;
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const displayedProducts = products.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  // Keep all your existing handler functions
-  // ... (handlePageChange, generatePageNumbers, handleProductClick, etc.)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [categoriesResponse, subcategoriesResponse, productsResponse] = await Promise.all([
+          axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/categories`),
+          axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/subcategories`),
+          axios.get(`${process.env.REACT_APP_BACKEND_URL}/client/products`),
+        ]);
+
+        setCategories(categoriesResponse.data);
+        setSubcategories(subcategoriesResponse.data);
+        setProducts(productsResponse.data);
+
+        // If there's a name query parameter, find and select the corresponding product
+        if (nameQuery) {
+          const productToSelect = productsResponse.data.find(
+            (product) => product.name === decodeURIComponent(nameQuery)
+          );
+          if (productToSelect) {
+            setSelectedProduct(productToSelect);
+            // If the product has a category, set it as active
+            if (productToSelect.category) {
+              setActiveCategory(productToSelect.category.name);
+              setSelectedCategory(productToSelect.category);
+              // If the product has a subcategory, set it as selected
+              if (productToSelect.subcategory) {
+                setSelectedSubcategory(productToSelect.subcategory);
+              }
+            }
+          }
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [nameQuery]);
+
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -193,36 +119,74 @@ const ShopPage = () => {
   };
 
   const handleOptionSelect = (category, option) => {
-    setSelectedOptions(prev => ({
+    setSelectedOptions((prev) => ({
       ...prev,
-      [category]: option
+      [category]: option,
     }));
   };
 
   const handleOrderFormChange = (e) => {
-    setOrderForm(prev => ({
+    setOrderForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
-  const handlePlaceOrder = () => {
-    // Here you would typically send the order data to your backend
-    console.log('Order placed:', {
-      user: orderForm,
-      product: selectedProduct,
-      selectedOptions
-    });
-    // Reset form and close popover
-    setOrderForm({ name: '', email: '', phone: '', location: '' });
-    setSelectedProduct(null);
+  const handlePlaceOrder = async () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser. Please enable it to proceed.');
+      return;
+    }
+
+    try {
+      // Get user's current location using Geolocation API
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          resolve,
+          (error) => {
+            reject(error);
+            alert('Unable to retrieve your location. Please enable location services and try again.');
+          },
+          { timeout: 5000 }
+        );
+      });
+
+      const { latitude, longitude } = position.coords;
+
+      // Prepare the order data
+      const orderData = {
+        productId: selectedProduct._id,
+        selectedOptions,
+        userDetails: orderForm,
+        location: {
+          latitude,
+          longitude,
+        },
+      };
+
+      // Send the order data to the backend
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/client/placeorder`,
+        orderData
+      );
+
+      // Handle the response (e.g., show a success message)
+      if (response.status === 200) {
+        alert('Order placed successfully!');
+        setOrderForm({ name: '', email: '', phone: '', location: '' });
+        setSelectedProduct(null);
+      }
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('Failed to place order. Please try again.');
+    }
   };
 
-  const ImageCard = ({ title, image, isSelected, onClick, price }) => (
-    <motion.div 
+  const ImageCard = ({ title, image, isSelected, onClick }) => (
+    <motion.div
       onClick={onClick}
       className={`
-        cursor-pointer bg-white overflow-hidden  shadow-md rounded-lg
+        cursor-pointer bg-white overflow-hidden shadow-md rounded-lg
         transition-all duration-200 transform hover:-translate-y-1 hover:shadow-xl
         ${isSelected ? 'ring-2 ring-blue-500 ring-offset-2 scale-105' : ''}
       `}
@@ -232,17 +196,12 @@ const ShopPage = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="relative aspect-square">
+      <div className="relative w-full h-[100px]">
         <img
-          src={image || "/placeholder.svg"}
+          src={`${process.env.REACT_APP_BACKEND_URL}/${image}` || '/placeholder.svg'}
           alt={title}
-          className="w-full h-full object-cover"
+          className="w-full h-[100px] object-cover"
         />
-        {price && (
-          <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white px-3 py-1 text-sm">
-            {price}
-          </div>
-        )}
       </div>
       <div className={`p-4 ${isSelected ? 'bg-blue-50' : ''}`}>
         <h4 className="font-medium text-gray-900">{title}</h4>
@@ -250,8 +209,16 @@ const ShopPage = () => {
     </motion.div>
   );
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 ">
+    <div className="min-h-screen bg-gray-50">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -282,7 +249,7 @@ const ShopPage = () => {
             </motion.button>
             {categories.map((category) => (
               <motion.button
-                key={category.slug}
+                key={category._id}
                 onClick={() => {
                   setActiveCategory(category.name);
                   setSelectedCategory(category);
@@ -310,21 +277,23 @@ const ShopPage = () => {
                 exit={{ opacity: 0, height: 0 }}
                 className="flex flex-wrap justify-center sm:justify-start items-center gap-2"
               >
-                {selectedCategory.subcategories.map((subcategory) => (
-                  <motion.button
-                    key={subcategory.slug}
-                    onClick={() => setSelectedSubcategory(subcategory)}
-                    className={`px-3 py-1.5 rounded-full text-sm border ${
-                      selectedSubcategory?.slug === subcategory.slug
-                        ? 'border-black bg-black text-white'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {subcategory.name}
-                  </motion.button>
-                ))}
+                {subcategories
+                  .filter((subcategory) => subcategory?.category?.name === selectedCategory?.name)
+                  .map((subcategory) => (
+                    <motion.button
+                      key={subcategory._id}
+                      onClick={() => setSelectedSubcategory(subcategory)}
+                      className={`px-3 py-1.5 rounded-full text-sm border ${
+                        selectedSubcategory?._id === subcategory._id
+                          ? 'border-black bg-black text-white'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {subcategory.name}
+                    </motion.button>
+                  ))}
               </motion.div>
             )}
           </AnimatePresence>
@@ -338,15 +307,15 @@ const ShopPage = () => {
           {displayedProducts
             .filter((product) => {
               if (activeCategory === 'All Products') return true;
-              if (!selectedSubcategory) return product.category === activeCategory;
+              if (!selectedSubcategory) return product.category.name === selectedCategory.name;
               return (
-                product.category === activeCategory &&
-                product.subcategory === selectedSubcategory.slug
+                product.category.name === selectedCategory?.name &&
+                product.subcategory.name === selectedSubcategory?.name
               );
             })
             .map((product) => (
               <motion.div
-                key={product.id}
+                key={product._id}
                 layout
                 className="group relative"
                 onClick={() => handleProductClick(product)}
@@ -354,9 +323,9 @@ const ShopPage = () => {
                 <div className="relative overflow-hidden rounded-lg bg-white shadow-md">
                   <div className="aspect-square relative">
                     <img
-                      src={product.image || '/placeholder.svg'}
+                      src={`${process.env.REACT_APP_BACKEND_URL}/${product.image}` || '/placeholder.svg'}
                       alt={product.name}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
                   {product.isNew && (
@@ -373,9 +342,8 @@ const ShopPage = () => {
                 <div className="mt-4 flex justify-between items-start">
                   <div>
                     <h3 className="font-medium text-sm sm:text-base line-clamp-1">{product.name}</h3>
-                    <p className="text-gray-600 text-sm">${product.price.toFixed(2)}</p>
                   </div>
-                  <motion.button 
+                  <motion.button
                     className="p-2 rounded-full hover:bg-gray-100"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -462,16 +430,14 @@ const ShopPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 md:p-8">
                   <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
                     <img
-                      src={selectedProduct.image || '/placeholder.svg'}
+                      src={`${process.env.REACT_APP_BACKEND_URL}/${selectedProduct.image}` || '/placeholder.svg'}
                       alt={selectedProduct.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   </div>
 
                   <div className="space-y-6">
-                    <p className="text-2xl font-bold">${selectedProduct.price.toFixed(2)}</p>
-                    
-                    {selectedProduct.customizationOptions.map((category) => (
+                    {selectedProduct.customizations?.map((category) => (
                       <div key={category.name}>
                         <h3 className="font-medium mb-4">{category.name}</h3>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -480,7 +446,6 @@ const ShopPage = () => {
                               key={option.name}
                               title={option.name}
                               image={option.image}
-                              price={option.price > 0 ? `+$${option.price.toFixed(2)}` : ''}
                               isSelected={selectedOptions[category.name] === option.name}
                               onClick={() => handleOptionSelect(category.name, option.name)}
                             />
@@ -489,7 +454,13 @@ const ShopPage = () => {
                       </div>
                     ))}
 
-                    <form onSubmit={(e) => { e.preventDefault(); handlePlaceOrder(); }} className="space-y-4">
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handlePlaceOrder();
+                      }}
+                      className="space-y-4"
+                    >
                       <input
                         type="text"
                         name="name"
@@ -525,7 +496,7 @@ const ShopPage = () => {
                         className="w-full p-3 border rounded-lg min-h-[100px]"
                         required
                       />
-                      <motion.button 
+                      <motion.button
                         type="submit"
                         className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors"
                         whileHover={{ scale: 1.05 }}
@@ -546,4 +517,3 @@ const ShopPage = () => {
 };
 
 export default ShopPage;
-

@@ -98,12 +98,7 @@ const AddCategorySection = () => {
             >
               <div className="flex justify-between items-center">
                 <h3 className="font-medium">{category.name}</h3>
-                <button
-                  onClick={() => handleDelete(category._id)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  Delete
-                </button>
+               
               </div>
             </div>
           ))}

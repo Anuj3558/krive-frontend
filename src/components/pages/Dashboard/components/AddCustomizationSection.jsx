@@ -140,12 +140,7 @@ const AddCustomizationSection = () => {
             >
               <div className="flex justify-between items-center mb-2">
                 <h3 className="font-medium">{customization.name}</h3>
-                <button
-                  onClick={() => handleDeleteCustomization(customization._id)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  Delete
-                </button>
+             
               </div>
               <div className="grid grid-cols-2 gap-2">
                 {customization.options.map((option, idx) => (

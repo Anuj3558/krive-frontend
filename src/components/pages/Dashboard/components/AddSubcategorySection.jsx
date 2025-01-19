@@ -117,12 +117,7 @@ const AddSubcategorySection = () => {
                     Category: {subcategory.categoryName}
                   </p>
                 </div>
-                <button
-                  onClick={() => handleDelete(subcategory.id)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  Delete
-                </button>
+              
               </div>
             </div>
           ))}

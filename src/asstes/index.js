@@ -11,10 +11,22 @@ import featureKidsParty from "./WhatsApp_Image_2024-12-06_at_22.15.38_bc42dd21-r
 import TraditionalLengh from "./Green_Pure_Banarasi_Lehenga_Set_by_Anjana_Bohra-removebg-preview.png"
 import FeaturePlazo from "./Casual__Summer_White_and_Off_White_color_Cotton_fabric_Palazzo___1900135-removebg-preview.png"
 import logoAnimtion from "./scooter.png"
+import alteration from "./Alteration.png"
+import alteration1 from "./Alteration1.png"
+import alteration2 from "./Alteration2.png"
+import alteration3 from "./Alteration3.png"
+import alteration4 from "./Alteration4.png"
+import alteration5 from "./Alteration5.png"
 export{
     hero1,
     heroKid,
     heroMale,
+    alteration,
+    alteration1,
+    alteration2,
+    alteration3,
+    alteration4,
+    alteration5,
     heroWonen,
     featureWomen,
     logoAnimtion,

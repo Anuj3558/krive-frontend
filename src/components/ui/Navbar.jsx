@@ -9,9 +9,10 @@ export default function Navbar() {
 
   const menuItems = [
     { name: 'Home', href: '/' },
-    { name: 'Shop', href: '/shop' },
+    { name: 'Customization', href: '/shop' },
     { name: 'About', href: '/aboutus' },
-    { name: 'Contact', href: 'contact' }
+    { name: 'Contact', href: '/contact' },
+    { name: 'Alteration', href: '/alteration' }
   ]
 
   return (

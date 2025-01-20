@@ -232,7 +232,7 @@ const ShopPage = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-3xl sm:text-4xl font-bold mb-8 text-center my-16 sm:text-left"
         >
-          SHOP
+          Customization's
         </motion.h1>
 
         <div className="flex flex-col w-full gap-4 mb-8">

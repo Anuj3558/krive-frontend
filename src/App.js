@@ -14,6 +14,7 @@ import Dashboard from './components/pages/Dashboard/Dashboard';
 import Contact from './components/pages/contact/Contact';
 import { LogIn } from 'lucide-react';
 import AuthPage from './components/ui/Login';
+import AlterationForm from './components/pages/alteration/Alteration';
 
 // Loading Animation Component
 const PageLoadingAnimation = () => (
@@ -68,7 +69,7 @@ const LoadingScreenWithRedirect = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/home');
-    }, 5000);
+    }, 3000);
     return () => clearTimeout(timer);
   }, [navigate]);
 
@@ -198,6 +199,30 @@ const AppContent = () => {
                   />
                 </Helmet>
                 <Dashboard />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/alteration"
+            element={
+              <PageTransition>
+                <Helmet>
+                  <title>Clothing Alterations & Tailoring Services | Krive</title>
+                  <meta
+                    name="description"
+                    content="Professional clothing alteration services in Indore. Expert tailoring for all garments including suits, dresses, pants, and traditional wear. Same-day alterations available."
+                  />
+                  <meta
+                    name="keywords"
+                    content="clothing alterations, garment alterations, tailoring services, dress alterations, suit alterations, pants hemming, size adjustment, clothing repair, seamstress services, professional tailor, same day alterations, traditional wear alterations, Indore tailor"
+                  />
+                  {/* Additional meta tags for SEO */}
+                  <meta property="og:title" content="Clothing Alterations & Tailoring Services | Krive" />
+                  <meta property="og:description" content="Professional clothing alteration services in Indore. Expert tailoring for all garments." />
+                  <meta name="twitter:title" content="Clothing Alterations & Tailoring Services | Krive" />
+                  <link rel="canonical" href="https://www.krive.com/alteration" />
+                </Helmet>
+                <AlterationForm/>
               </PageTransition>
             }
           />

@@ -7,7 +7,6 @@ const AddCategorySection = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Fetch categories when the component mounts
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -31,7 +30,6 @@ const AddCategorySection = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate input
     if (!categoryName) {
       setError("Category name is required.");
       return;
@@ -45,7 +43,6 @@ const AddCategorySection = () => {
     setError(null);
 
     try {
-      // Send POST request to the server using Axios
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/admin/addCategory`,
         newCategory,
@@ -57,10 +54,7 @@ const AddCategorySection = () => {
         }
       );
 
-      // Update the local state with the new category
       setCategories([...categories, response.data.category]);
-
-      // Reset the form
       setCategoryName("");
     } catch (err) {
       setError(err.response?.data?.error || "Failed to add category.");
@@ -71,14 +65,11 @@ const AddCategorySection = () => {
 
   const handleDelete = async (id) => {
     try {
-      // Send DELETE request to the server
       await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/admin/categories/${id}`, {
         headers: {
           Authorization: "secretkey",
         },
       });
-
-      // Remove the category from the local state
       setCategories(categories.filter((cat) => cat._id !== id));
     } catch (err) {
       console.error("Error deleting category:", err);
@@ -86,57 +77,69 @@ const AddCategorySection = () => {
   };
 
   return (
-    <div className="flex gap-8 p-6">
-      {/* Left side - List of Categories */}
-      <div className="w-1/2 bg-gray-50 p-6 rounded-lg">
-        <h2 className="text-xl font-semibold mb-4">Added Categories</h2>
-        <div className="space-y-4">
-          {categories.map((category) => (
-            <div
-              key={category._id}
-              className="bg-white p-4 rounded-lg shadow"
-            >
-              <div className="flex justify-between items-center">
-                <h3 className="font-medium">{category.name}</h3>
-               
+    <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 p-4 lg:p-6">
+      {/* Categories List Section */}
+      <div className="w-full lg:w-1/2">
+        <div className="bg-gray-50 p-4 lg:p-6 rounded-lg shadow-sm">
+          <h2 className="text-lg lg:text-xl font-semibold mb-4">Added Categories</h2>
+          <div className="space-y-3">
+            {categories.map((category) => (
+              <div
+                key={category._id}
+                className="bg-white p-3 lg:p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+              >
+                <div className="flex justify-between items-center">
+                  <h3 className="font-medium text-gray-900">{category.name}</h3>
+                </div>
               </div>
-            </div>
-          ))}
-          {categories.length === 0 && (
-            <p className="text-gray-500 text-center py-4">
-              No categories added yet
-            </p>
-          )}
+            ))}
+            {categories.length === 0 && (
+              <div className="bg-white rounded-lg p-6">
+                <p className="text-gray-500 text-center text-sm lg:text-base">
+                  No categories added yet
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Right side - Add New Category Form */}
-      <div className="w-1/2">
-        <h2 className="text-xl font-semibold mb-4">Add New Category</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Category Name
-            </label>
-            <input
-              type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              className="w-full p-2 border rounded-lg"
-              required
-            />
-          </div>
+      {/* Add Category Form Section */}
+      <div className="w-full lg:w-1/2 mt-4 lg:mt-0">
+        <div className="bg-white p-4 lg:p-6 rounded-lg shadow-sm">
+          <h2 className="text-lg lg:text-xl font-semibold mb-4">Add New Category</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Category Name
+              </label>
+              <input
+                type="text"
+                value={categoryName}
+                onChange={(e) => setCategoryName(e.target.value)}
+                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Enter category name"
+                required
+              />
+            </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
+            )}
 
-          <button
-            type="submit"
-            className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-indigo-300"
-            disabled={loading}
-          >
-            {loading ? "Adding..." : "Add Category"}
-          </button>
-        </form>
+            <button
+              type="submit"
+              className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 
+                disabled:bg-indigo-300 disabled:cursor-not-allowed transition-colors duration-200
+                text-sm lg:text-base font-medium"
+              disabled={loading}
+            >
+              {loading ? "Adding..." : "Add Category"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

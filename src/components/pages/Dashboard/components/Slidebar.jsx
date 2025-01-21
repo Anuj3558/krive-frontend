@@ -1,97 +1,78 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  LayoutDashboard,
-  ShoppingBag,
-  
-  Settings,
-  LogOut,
-  ChevronLeft,
-  List,
-  Layers,
+import { 
+  LayoutDashboard, 
+  ShoppingBag, 
+  Settings, 
+  LogOut, 
+  ChevronLeft, 
+  List, 
+  Layers, 
   Sliders,
+  X 
 } from 'lucide-react';
 
-// Sidebar Component
-export const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
+export const Sidebar = ({ 
+  activeSection, 
+  setActiveSection, 
+  isOpen, 
+  setIsOpen,
+  isMobile 
+}) => {
   const menuItems = [
-    {
-      title: 'Dashboard',
-      icon: LayoutDashboard,
-      section: 'dashboard',
-    },
-    {
-      title: 'Categories',
-      icon: List,
-      section: 'categories',
-    },
-    {
-      title: 'Subcategories',
-      icon: Layers,
-      section: 'subcategories',
-    },
-    {
-      title: 'Products',
-      icon: ShoppingBag,
-      section: 'products',
-    },
-    {
-      title: 'Customization',
-      icon: Sliders,
-      section: 'customization',
-    },
-    {
-      title: 'Settings',
-      icon: Settings,
-      section: 'settings',
-    },
+    { title: 'Dashboard', icon: LayoutDashboard, section: 'dashboard' },
+    { title: 'Categories', icon: List, section: 'categories' },
+    { title: 'Subcategories', icon: Layers, section: 'subcategories' },
+    { title: 'Products', icon: ShoppingBag, section: 'products' },
+    { title: 'Customization', icon: Sliders, section: 'customization' },
+    { title: 'Alteration Requests', icon: Settings, section: 'Alteration' },
   ];
 
   const sidebarVariants = {
-    open: {
-      width: '18rem',
-      transition: {
-        type: 'spring',
-        stiffness: 400,
-        damping: 40,
-      },
+    open: { 
+      width: isMobile ? '100%' : '18rem',
+      x: 0,
+      transition: { type: 'spring', stiffness: 400, damping: 40 } 
     },
-    closed: {
-      width: '5rem',
-      transition: {
-        type: 'spring',
-        stiffness: 400,
-        damping: 40,
-      },
+    closed: { 
+      width: isMobile ? '100%' : '5rem',
+      x: isMobile ? '-100%' : 0,
+      transition: { type: 'spring', stiffness: 400, damping: 40 } 
     },
+  };
+
+  const handleNavigation = (section) => {
+    setActiveSection(section);
+    if (isMobile) {
+      setIsOpen(false);
+    }
   };
 
   return (
     <>
-      {/* Mobile Overlay */}
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && isMobile && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/50 z-40"
           />
         )}
       </AnimatePresence>
 
-      {/* Sidebar */}
       <motion.div
         variants={sidebarVariants}
-        initial={false}
+        initial="closed"
         animate={isOpen ? 'open' : 'closed'}
-        className="fixed inset-y-0 left-0 z-50 bg-white border-r"
+        className={`fixed inset-y-0 left-0 z-50 bg-white border-r ${
+          isMobile ? 'w-[280px]' : ''
+        }`}
       >
         <div className="flex flex-col h-full">
-          {/* Header */}
           <div className="p-6 flex items-center justify-between">
             <AnimatePresence mode="wait">
-              {isOpen && (
+              {(isOpen || isMobile) && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -105,20 +86,29 @@ export const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) 
                 </motion.div>
               )}
             </AnimatePresence>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg hover:bg-gray-100 lg:block hidden"
-            >
-              <motion.div
-                animate={{ rotate: isOpen ? 0 : 180 }}
-                transition={{ duration: 0.3 }}
+            
+            {isMobile ? (
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg"
               >
-                <ChevronLeft className="w-5 h-5" />
-              </motion.div>
-            </button>
+                <X className="w-5 h-5" />
+              </button>
+            ) : (
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-2 rounded-lg hover:bg-gray-100 lg:block hidden"
+              >
+                <motion.div 
+                  animate={{ rotate: isOpen ? 0 : 180 }} 
+                  transition={{ duration: 0.3 }}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </motion.div>
+              </button>
+            )}
           </div>
 
-          {/* Navigation */}
           <nav className="flex-1 p-4">
             <ul className="space-y-1">
               {menuItems.map((item) => {
@@ -126,7 +116,7 @@ export const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) 
                 return (
                   <li key={item.section}>
                     <button
-                      onClick={() => setActiveSection(item.section)}
+                      onClick={() => handleNavigation(item.section)}
                       className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors relative w-full ${
                         isActive
                           ? 'text-indigo-600'
@@ -138,16 +128,16 @@ export const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) 
                           layoutId="activeNav"
                           className="absolute inset-0 bg-indigo-50 rounded-lg"
                           initial={false}
-                          transition={{
-                            type: 'spring',
-                            stiffness: 500,
-                            damping: 30,
+                          transition={{ 
+                            type: 'spring', 
+                            stiffness: 500, 
+                            damping: 30 
                           }}
                         />
                       )}
                       <item.icon className="w-5 h-5 shrink-0" />
                       <AnimatePresence mode="wait">
-                        {isOpen && (
+                        {(isOpen || isMobile) && (
                           <motion.span
                             initial={{ opacity: 0, width: 0 }}
                             animate={{ opacity: 1, width: 'auto' }}
@@ -165,12 +155,11 @@ export const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) 
             </ul>
           </nav>
 
-          {/* Footer */}
           <div className="p-4 mt-auto">
             <button className="flex items-center gap-3 px-4 py-3 w-full text-sm font-medium text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
               <LogOut className="w-5 h-5 shrink-0" />
               <AnimatePresence mode="wait">
-                {isOpen && (
+                {(isOpen || isMobile) && (
                   <motion.span
                     initial={{ opacity: 0, width: 0 }}
                     animate={{ opacity: 1, width: 'auto' }}

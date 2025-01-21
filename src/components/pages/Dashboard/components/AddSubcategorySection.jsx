@@ -1,183 +1,164 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react"
+import axios from "axios"
 
 const AddSubcategorySection = () => {
-  const [subcategories, setSubcategories] = useState([]);
-  const [categories, setCategories] = useState([]); // State to store categories
-  const [categoryName, setCategoryName] = useState(""); // State for category name
-  const [subcategoryName, setSubcategoryName] = useState("");
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [subcategories, setSubcategories] = useState([])
+  const [categories, setCategories] = useState([])
+  const [categoryName, setCategoryName] = useState("")
+  const [subcategoryName, setSubcategoryName] = useState("")
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
 
-  // Fetch all categories on component load
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/categories`, {
-          headers: {
-            Authorization: "secretkey",
-          },
-        });
-        setCategories(response.data);
-      } catch (err) {
-        console.error("Error fetching categories:", err);
-      }
-    };
+    fetchCategories()
+    fetchSubcategories()
+  }, [])
 
-    fetchCategories();
-  }, []);
-  useEffect(() => {
-    const fetchSubcategories = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/subcategories`, {
-          headers: {
-            Authorization: "secretkey",
-          },
-        });
-        setSubcategories(response.data);
-      } catch (err) {
-        setError(err.response?.data?.error || "Failed to fetch subcategories.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/categories`, {
+        headers: { Authorization: "secretkey" },
+      })
+      setCategories(response.data)
+    } catch (err) {
+      console.error("Error fetching categories:", err)
+    }
+  }
 
-    fetchSubcategories();
-  }, []);
+  const fetchSubcategories = async () => {
+    setLoading(true)
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/subcategories`, {
+        headers: { Authorization: "secretkey" },
+      })
+      setSubcategories(response.data)
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to fetch subcategories.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Validate inputs
+    e.preventDefault()
     if (!categoryName || !subcategoryName) {
-      setError("All fields are required.");
-      return;
+      setError("All fields are required.")
+      return
     }
 
-    const newSubcategory = {
-      categoryName,
-      name: subcategoryName,
-    };
-
-    setLoading(true);
-    setError(null);
+    const newSubcategory = { categoryName, name: subcategoryName }
+    setLoading(true)
+    setError(null)
 
     try {
-      // Send POST request to the server using Axios
-      const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/admin/addSubcategory`,
-        newSubcategory,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "secretkey",
-          },
-        }
-      );
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/addSubcategory`, newSubcategory, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "secretkey",
+        },
+      })
 
-      // Update the local state with the new subcategory
       setSubcategories([
         ...subcategories,
         {
-          id: response.data.subcategory._id, // Use the ID returned by the server
+          id: response.data.subcategory._id,
           ...newSubcategory,
-          categoryName, // Use the selected category name
+          categoryName,
         },
-      ]);
+      ])
 
-      // Reset the form
-      setSubcategoryName("");
-      setCategoryName("");
+      setSubcategoryName("")
+      setCategoryName("")
     } catch (err) {
-      setError(err.response?.data?.error || "Failed to add subcategory.");
+      setError(err.response?.data?.error || "Failed to add subcategory.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
-  const handleDelete = (id) => {
-    setSubcategories(subcategories.filter((sub) => sub.id !== id));
-  };
+  }
 
   return (
-    <div className="flex gap-8 p-6">
-      {/* Left side - List of Subcategories */}
-      <div className="w-1/2 bg-gray-50 p-6 rounded-lg">
-        <h2 className="text-xl font-semibold mb-4">Added Subcategories</h2>
-        <div className="space-y-4">
-          {subcategories.map((subcategory) => (
-            <div
-              key={subcategory.id}
-              className="bg-white p-4 rounded-lg shadow"
-            >
-              <div className="flex justify-between items-center">
-                <div>
-                  <h3 className="font-medium">{subcategory.name}</h3>
-                  <p className="text-sm text-gray-500">
-                    Category: {subcategory.categoryName}
-                  </p>
+    <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 p-4 lg:p-6">
+      {/* Subcategories List Section */}
+      <div className="w-full lg:w-1/2">
+        <div className="bg-gray-50 p-4 lg:p-6 rounded-lg">
+          <h2 className="text-lg lg:text-xl font-semibold mb-4">Added Subcategories</h2>
+          <div className="space-y-3">
+            {subcategories.map((subcategory) => (
+              <div 
+                key={subcategory.id} 
+                className="bg-white p-3 lg:p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+              >
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                  <div>
+                    <h3 className="font-medium text-gray-900">{subcategory.name}</h3>
+                    <p className="text-sm text-gray-500">Category: {subcategory.categoryName}</p>
+                  </div>
                 </div>
-              
               </div>
-            </div>
-          ))}
-          {subcategories.length === 0 && (
-            <p className="text-gray-500 text-center py-4">
-              No subcategories added yet
-            </p>
-          )}
+            ))}
+            {subcategories.length === 0 && (
+              <div className="bg-white rounded-lg p-6">
+                <p className="text-gray-500 text-center">No subcategories added yet</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Right side - Add New Subcategory Form */}
-      <div className="w-1/2">
-        <h2 className="text-xl font-semibold mb-4">Add New Subcategory</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Category
-            </label>
-            <select
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              className="w-full p-2 border rounded-lg"
-              required
+      {/* Add Subcategory Form Section */}
+      <div className="w-full lg:w-1/2 mt-4 lg:mt-0">
+        <div className="bg-white p-4 lg:p-6 rounded-lg shadow-sm">
+          <h2 className="text-lg lg:text-xl font-semibold mb-4">Add New Subcategory</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <select
+                value={categoryName}
+                onChange={(e) => setCategoryName(e.target.value)}
+                className="w-full p-2 border rounded-lg bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              >
+                <option value="">Select a category</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Subcategory Name</label>
+              <input
+                type="text"
+                value={subcategoryName}
+                onChange={(e) => setSubcategoryName(e.target.value)}
+                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                required
+                placeholder="Enter subcategory name"
+              />
+            </div>
+
+            {error && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 
+                disabled:bg-indigo-300 disabled:cursor-not-allowed transition-colors duration-200
+                text-sm lg:text-base font-medium"
+              disabled={loading}
             >
-              <option value="">Select a category</option>
-              {categories.map((category) => (
-                <option key={category._id} value={category.name}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Subcategory Name
-            </label>
-            <input
-              type="text"
-              value={subcategoryName}
-              onChange={(e) => setSubcategoryName(e.target.value)}
-              className="w-full p-2 border rounded-lg"
-              required
-            />
-          </div>
-
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-
-          <button
-            type="submit"
-            className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-indigo-300"
-            disabled={loading}
-          >
-            {loading ? "Adding..." : "Add Subcategory"}
-          </button>
-        </form>
+              {loading ? "Adding..." : "Add Subcategory"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AddSubcategorySection;
+export default AddSubcategorySection

@@ -95,7 +95,7 @@ const HeroSection = () => {
             <img
               src={slide.image}
               alt={slide.title}
-              className="w-full h-full object-cover lg:object-contain md:pt-16 lg:pt-24"
+              className="w-full h-full object-contain bg-no-repeat lg:object-contain md:pt-16 lg:pt-24"
             />
             <div className="absolute inset-0 bg-[#5f60b9]/60 lg:bg-[#5f60b9]/60" />
           </div>
@@ -124,7 +124,7 @@ const HeroSection = () => {
         </div>
         <a href='/shop'>
           <button 
-            className={`bg-black hover:bg-gray-800 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg transition-all duration-400 delay-300 ${
+            className={`bg-black hover:bg-gray-800 mb-28 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg transition-all duration-400 delay-300 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             } ${
               isAnimating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
@@ -136,24 +136,35 @@ const HeroSection = () => {
       </div>
 
       {/* Category Preview */}
-      <div className={`absolute bottom-4 sm:bottom-6 lg:bottom-8 left-0 right-0 transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+      <div className={`absolute bottom-0 left-0 right-0 
+        transition-all duration-1000 delay-700 transform
+        pb-4 xs:pb-6 sm:pb-8 md:pb-10 lg:pb-12
+        ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
+          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4">
             {categories.map((category, index) => (
               <div 
                 key={category.id} 
-                className={`relative h-32 sm:h-40 lg:h-48 group overflow-hidden cursor-pointer transition-all duration-1000`}
-                style={{ transitionDelay: `${1200 + index * 200}ms` }}
-                onClick={() => handleCategoryClick(category.category)} // Add onClick handler
+                className={`relative cursor-pointer overflow-hidden rounded-lg
+                  transition-all duration-500 ease-out transform
+                  h-24 xs:h-28 sm:h-32 md:h-36 lg:h-40 xl:h-48
+                  hover:scale-[1.02] hover:shadow-xl
+                  ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                style={{ transitionDelay: `${1000 + index * 200}ms` }}
+                onClick={() => handleCategoryClick(category.category)}
               >
                 <img
                   src={category.image}
                   alt={category.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-700 
+                    group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-black/40 transition-opacity duration-300 group-hover:opacity-60" />
+                <div className="absolute inset-0 bg-black/40 
+                  transition-opacity duration-300 hover:bg-black/60" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <h3 className="text-white text-base sm:text-lg lg:text-xl font-semibold transform transition-transform duration-300 group-hover:scale-110 ">
+                  <h3 className="text-white font-semibold transition-all duration-300 transform
+                    text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl
+                    hover:scale-110">
                     {category.title}
                   </h3>
                 </div>
@@ -162,6 +173,7 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+
 
       {/* Navigation Buttons */}
    

@@ -1,8 +1,8 @@
 import * as React from "react"
-import { cva } from "class-variance-authority"
+
 import { X } from "lucide-react"
 
-const alertVariants = cva(
+const alertVariants = (
   "relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
   {
     variants: {

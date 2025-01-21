@@ -214,7 +214,7 @@ const AppContent = () => {
                   />
                   <meta
                     name="keywords"
-                    content="clothing alterations, garment alterations, tailoring services, dress alterations, suit alterations, pants hemming, size adjustment, clothing repair, seamstress services, professional tailor, same day alterations, traditional wear alterations, Indore tailor"
+                    content="clothing alterations,Clothes Customization, garment alterations, tailoring services, dress alterations, suit alterations, pants hemming, size adjustment, clothing repair, seamstress services, professional tailor, same day alterations, traditional wear alterations, Indore tailor"
                   />
                   {/* Additional meta tags for SEO */}
                   <meta property="og:title" content="Clothing Alterations & Tailoring Services | Krive" />

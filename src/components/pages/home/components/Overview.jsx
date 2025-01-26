@@ -38,7 +38,7 @@ const ProductOverview = () => {
   };
 
   const handleProductClick = (product) => {
-    navigate(`/shop?name=${encodeURIComponent(product.name)}`);
+    navigate(`/shop/customization?name=${encodeURIComponent(product.name)}`);
   };
 
   const generatePageNumbers = () => {

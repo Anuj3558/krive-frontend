@@ -15,6 +15,8 @@ import Contact from './components/pages/contact/Contact';
 import { LogIn } from 'lucide-react';
 import AuthPage from './components/ui/Login';
 import AlterationForm from './components/pages/alteration/Alteration';
+import FabricDesigner from './components/pages/shop/FabricDesigner';
+import CustomizationOptions from './components/pages/shop/CustomizationOptions';
 
 // Loading Animation Component
 const PageLoadingAnimation = () => (
@@ -153,7 +155,7 @@ const AppContent = () => {
                     content="Shop the latest fashion trends at Krive."
                   />
                 </Helmet>
-                <ShopPage />
+                <CustomizationOptions />
               </PageTransition>
             }
           />
@@ -226,21 +228,55 @@ const AppContent = () => {
               </PageTransition>
             }
           />
-          <Route
-            path="/customization"
+      <Route
+            path="/shop/customization"
             element={
               <PageTransition>
                 <Helmet>
-                  <title>Customization - Krive</title>
+                  <title>Clothing Alterations & Tailoring Services | Krive</title>
                   <meta
                     name="description"
-                    content="Customise your clothing with Krive."
+                    content="Professional clothing alteration services in Indore. Expert tailoring for all garments including suits, dresses, pants, and traditional wear. Same-day alterations available."
                   />
+                  <meta
+                    name="keywords"
+                    content="clothing alterations,Clothes Customization, garment alterations, tailoring services, dress alterations, suit alterations, pants hemming, size adjustment, clothing repair, seamstress services, professional tailor, same day alterations, traditional wear alterations, Indore tailor"
+                  />
+                  {/* Additional meta tags for SEO */}
+                  <meta property="og:title" content="Clothing Alterations & Tailoring Services | Krive" />
+                  <meta property="og:description" content="Professional clothing alteration services in Indore. Expert tailoring for all garments." />
+                  <meta name="twitter:title" content="Clothing Alterations & Tailoring Services | Krive" />
+                  <link rel="canonical" href="https://www.krive.com/alteration" />
                 </Helmet>
-                <CustomizationPage />
+                <ShopPage/>
               </PageTransition>
             }
-          />
+          /><Route
+          path="/shop/fabric-designer"
+          element={
+            <PageTransition>
+              <Helmet>
+                <title>Clothing Alterations & Tailoring Services | Krive</title>
+                <meta
+                  name="description"
+                  content="Professional clothing alteration services in Indore. Expert tailoring for all garments including suits, dresses, pants, and traditional wear. Same-day alterations available."
+                />
+                <meta
+                  name="keywords"
+                  content="clothing alterations,Clothes Customization, garment alterations, tailoring services, dress alterations, suit alterations, pants hemming, size adjustment, clothing repair, seamstress services, professional tailor, same day alterations, traditional wear alterations, Indore tailor"
+                />
+                {/* Additional meta tags for SEO */}
+                <meta property="og:title" content="Clothing Alterations & Tailoring Services | Krive" />
+                <meta property="og:description" content="Professional clothing alteration services in Indore. Expert tailoring for all garments." />
+                <meta name="twitter:title" content="Clothing Alterations & Tailoring Services | Krive" />
+                <link rel="canonical" href="https://www.krive.com/alteration" />
+              </Helmet>
+              <FabricDesigner/>
+            </PageTransition>
+          }
+        />
+    
+      
           <Route
             path="/Login"
             element={
@@ -254,7 +290,7 @@ const AppContent = () => {
             }
           />
           <Route
-            path="*"
+            path="/sample"
             element={
               <PageTransition>
                 <Helmet>
@@ -264,7 +300,7 @@ const AppContent = () => {
                     content="The page you are looking for does not exist."
                   />
                 </Helmet>
-                <NotFoundPage />
+                <FabricDesigner />
               </PageTransition>
             }
           />

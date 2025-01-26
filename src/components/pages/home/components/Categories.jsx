@@ -130,7 +130,7 @@ const ProductCard = ({ title, subtitle, image, isLarge = false, delay = 0 }) => 
         </motion.div>
 
         <motion.a 
-          href="/shop"
+          href="/shop/customization  "
           variants={buttonVariants}
           initial="hidden"
           animate={inView && imageLoaded ? "visible" : "hidden"}

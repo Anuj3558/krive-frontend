@@ -8,7 +8,7 @@ const LoadingScreen = () => {
       <div className="relative w-96 h-64">
         {/* Brand name with floating effect */}
         <div className="flex justify-center mb-12 relative">
-          {['K', 'r', 'i', 'v', 'e'].map((letter, index) => (
+          {['K', 'r', 'i', 'V', 'e'].map((letter, index) => (
             <div
               key={index}
               className="relative"

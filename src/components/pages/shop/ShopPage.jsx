@@ -332,7 +332,7 @@ const ShopPage = () => {
                       className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
-                  {product.isNew && (
+                  {true && (
                     <motion.span
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -407,7 +407,7 @@ const ShopPage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 mt-20 p-10 bg-black bg-opacity-50"
+              className="fixed inset-0 z-50 flex items-center justify-center  mt-20 p-10 bg-black bg-opacity-50"
               onClick={() => setSelectedProduct(null)}
             >
               <motion.div

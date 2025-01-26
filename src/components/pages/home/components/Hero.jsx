@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { hero1, hero2, hero3, heroKid, heroMale, heroWonen } from '../../../../asstes';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
@@ -58,7 +57,7 @@ const HeroSection = () => {
     setTimeout(() => setIsLoaded(true), 100);
     const timer = setInterval(handleNext, 5000);
     return () => clearInterval(timer);
-  }, []);
+  },);
 
   const handleNext = () => {
     if (!isAnimating) {
@@ -68,17 +67,11 @@ const HeroSection = () => {
     }
   };
 
-  const handlePrev = () => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-      setTimeout(() => setIsAnimating(false), 750);
-    }
-  };
+ 
 
   // Function to handle category click
   const handleCategoryClick = (category) => {
-    navigate(`/shop?category=${encodeURIComponent(category)}`);
+    navigate(`/shop/customization?category=${encodeURIComponent(category)}`);
   };
 
   return (
@@ -173,13 +166,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-
-
-      {/* Navigation Buttons */}
-   
-
-      {/* Slide Indicators */}
-   
     </section>
   );
 };

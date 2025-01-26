@@ -8,7 +8,10 @@ import {
   List, 
   Layers, 
   Sliders,
-  X 
+  X, 
+  Folder,
+  FolderOpen,
+  Feather
 } from 'lucide-react';
 
 export const Sidebar = ({ 
@@ -24,8 +27,11 @@ export const Sidebar = ({
     { title: 'Subcategories', icon: Layers, section: 'subcategories' },
     { title: 'Products', icon: ShoppingBag, section: 'products' },
     { title: 'Customization', icon: Sliders, section: 'customization' },
-    { title: 'Alteration Requests', icon: Settings, section: 'Alteration' },
-  ];
+    { title: 'Alteration Requests', icon: Settings, section: 'alteration' },
+    { title: 'Fabric Categories', icon: Folder, section: 'fabricCategory' },
+    { title: 'Fabric Subcategories', icon: FolderOpen, section: 'fabricSubcategory' },
+    { title: 'Fabrics', icon: Feather, section: 'fabric' },
+];
 
   const sidebarVariants = {
     open: { 

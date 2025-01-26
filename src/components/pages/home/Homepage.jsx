@@ -3,8 +3,6 @@ import { Helmet } from "react-helmet";
 import HeroSection from "./components/Hero";
 import ProductCategories from "./components/Categories";
 import ProductOverview from "./components/Overview";
-import ReviewForm from "./components/Review";
-import { Cat, Workflow } from "lucide-react";
 import WorkflowSection from "./components/WorkFlowSection";
 import ReviewsMarquee from "./components/reelsSection";
 import CTAButton from "./components/CTA";

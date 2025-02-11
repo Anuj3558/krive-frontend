@@ -144,33 +144,20 @@ const ShopPage = () => {
   };
 
   const handlePlaceOrder = async () => {
-    if (!navigator.geolocation) {
+    if (false) {
       alert('Geolocation is not supported by your browser. Please enable it to proceed.');
       return;
     }
 
     try {
-      const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(
-          resolve,
-          (error) => {
-            reject(error);
-            alert('Unable to retrieve your location. Please enable location services and try again.');
-          },
-          { timeout: 5000 }
-        );
-      });
+     ;
 
-      const { latitude, longitude } = position.coords;
+   
 
       const orderData = {
         productId: selectedProduct._id,
         selectedOptions,
         userDetails: orderForm,
-        location: {
-          latitude,
-          longitude,
-        },
       };
 
       const response = await axios.post(

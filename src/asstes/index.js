@@ -17,10 +17,16 @@ import alteration2 from "./Alteration2.png"
 import alteration3 from "./Alteration3.png"
 import alteration4 from "./Alteration4.png"
 import alteration5 from "./Alteration5.png"
+import ourStory from "./freepik__the-style-is-candid-image-photography-with-natural__4834.jpg";
+import ourMission from "./freepik__the-style-is-candid-image-photography-with-natural__4835.jpg";
+import ourTeam from "./freepik__the-style-is-candid-image-photography-with-natural__4836.jpg";
 export{
     hero1,
     heroKid,
     heroMale,
+    ourStory,
+    ourMission,
+    ourTeam,
     alteration,
     alteration1,
     alteration2,

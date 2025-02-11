@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
+import { ourMission, ourStory, ourTeam } from '../../../asstes';
 const ReviewForm = () => {
   const [formData, setFormData] = useState({
     author: '',
@@ -161,7 +162,7 @@ const AboutUs = () => {
             variants={itemVariants} // Each item has its own entrance animation
           >
             <img
-              src="/images/story.jpg"
+              src={ourStory}
               alt="Our Story"
               className="rounded-lg shadow-lg"
             />
@@ -169,10 +170,8 @@ const AboutUs = () => {
           <motion.div className="w-full md:w-1/2" variants={itemVariants}>
             <h2 className="text-3xl font-semibold mb-4 text-gray-800">Our Story</h2>
             <p className="text-gray-600 text-lg">
-              Founded in 2023, our company has been at the forefront of innovation in the e-commerce industry. 
-              We started with a simple idea: to create a platform that connects people with the products they love. 
-              Today, we're proud to serve millions of customers worldwide, offering a seamless shopping experience 
-              that combines cutting-edge technology with a personal touch.
+            At Thread & Trend, our mission is to redefine fashion by empowering individuals to express their unique style through customized clothing. Founded in 2023, we set out to bridge the gap between creativity and fashion, offering a seamless platform where customers can personalize their outfits with precision and quality. By combining cutting-edge technology with expert craftsmanship, we aim to
+             make fashion truly personal, accessible, and trend-forward for everyone.
             </p>
           </motion.div>
         </motion.section>
@@ -181,7 +180,7 @@ const AboutUs = () => {
         <motion.section variants={itemVariants} className="flex flex-col md:flex-row-reverse items-center gap-8">
           <motion.div className="w-full md:w-1/2" variants={fadeInVariants}>
             <img
-              src="/images/mission.jpg"
+              src={ourMission}
               alt="Our Mission"
               className="rounded-lg shadow-lg"
             />
@@ -189,11 +188,7 @@ const AboutUs = () => {
           <motion.div className="w-full md:w-1/2" variants={itemVariants}>
             <h2 className="text-3xl font-semibold mb-4 text-gray-800">Our Mission</h2>
             <p className="text-gray-600 text-lg">
-              Our mission is to empower businesses and consumers alike by providing a seamless, 
-              user-friendly platform for online shopping. We strive to offer the best products 
-              at competitive prices while ensuring the highest standards of customer service. 
-              By leveraging the latest technologies and data-driven insights, we aim to 
-              revolutionize the e-commerce landscape and set new benchmarks for the industry.
+            Our mission is to empower individuals to express their unique style through high-quality, customized fashion. We provide a seamless, user-friendly platform for personalized clothing, ensuring a perfect blend of creativity and craftsmanship. By leveraging the latest technology and data-driven insights, we strive to revolutionize the fashion industry, making custom apparel more accessible, stylish, and trend-forward than ever before
             </p>
           </motion.div>
         </motion.section>
@@ -202,7 +197,7 @@ const AboutUs = () => {
         <motion.section variants={itemVariants} className="flex flex-col md:flex-row items-center gap-8">
           <motion.div className="w-full md:w-1/2" variants={fadeInVariants}>
             <img
-              src="/images/team.jpg"
+              src={ourTeam}
               alt="Our Team"
               className="rounded-lg shadow-lg"
             />
@@ -246,22 +241,7 @@ const AboutUs = () => {
         </motion.section>
 
         {/* Section 5: Contact Us */}
-        <motion.section variants={fadeInVariants} className="text-center">
-          <h2 className="text-3xl font-semibold mb-4 text-gray-800">Contact Us</h2>
-          <p className="text-gray-600 text-lg mb-6">
-            We'd love to hear from you! Whether you have a question about our products, 
-            need help with an order, or just want to say hello, don't hesitate to reach out.
-          </p>
-<ReviewForm />
-          <motion.button
-            className="px-8 py-3 bg-blue-600 text-white text-lg font-semibold rounded-full hover:bg-blue-700 transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-
-            Get in Touch
-          </motion.button>
-        </motion.section>
+       
       </motion.div>
     </motion.div>
   );

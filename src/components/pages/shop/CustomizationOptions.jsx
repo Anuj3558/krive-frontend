@@ -7,12 +7,6 @@ const CustomizationOptions = () => {
 
   const options = [
     {
-      title: "I have Fabric but no Design",
-      description: "Upload your fabric details and explore our design collection",
-      icon: <Shirt className="w-12 h-12" />,
-      path: "/shop/design-only"
-    },
-    {
       title: "I have Design but no Fabric",
       description: "Share your design and browse our fabric selection",
       icon: <Palette className="w-12 h-12" />,
@@ -31,7 +25,7 @@ const CustomizationOptions = () => {
       <div className="max-w-7xl mx-auto px-4">
         <h1 className="text-4xl font-bold text-center mb-12">How would you like to customize?</h1>
         
-        <div className="grid md:grid-cols-3 gap-8 mt-8">
+        <div className="grid md:grid-cols-2 gap-8 mt-8">
           {options.map((option) => (
             <div
               key={option.title}

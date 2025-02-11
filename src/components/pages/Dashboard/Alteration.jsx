@@ -84,7 +84,7 @@ const AlterationRequests = () => {
 
             <div className="space-y-4">
               <img
-                src={alteration.image}
+                src={`${process.env.REACT_APP_BACKEND_URL}/${alteration.image}`}
                 alt="Alteration request"
                 className="w-full h-48 object-cover rounded-lg"
               />

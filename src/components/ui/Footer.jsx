@@ -9,7 +9,7 @@ const Footer = () => {
           {/* Logo and Categories Section */}
           <div>
             <div className="mb-6">
-              <h2 className="text-white text-3xl font-bold">Krive</h2>
+              <h2 className="text-white text-3xl font-bold">Thread & Trend</h2>
             </div>
             <h3 className="text-white text-lg font-bold mb-4">CATEGORIES</h3>
             <ul className="space-y-2">
@@ -33,7 +33,7 @@ const Footer = () => {
           <div>
             <h3 className="text-white text-lg font-bold mb-4">GET IN TOUCH</h3>
             <p className="mb-4">
-              Any questions? Let us know at our store in Krive, Indore or call us on (+91) 98765 43210
+              Any questions? Let us know at our store in Thread & Trend, Pune or call us on (+91) 98765 43210
             </p>
             <div className="flex space-x-4">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
@@ -55,7 +55,7 @@ const Footer = () => {
 
           {/* Copyright */}
           <div className="text-sm text-center">
-            © {new Date().getFullYear()} Krive. All rights reserved.
+            © {new Date().getFullYear()} Thread & Trend. All rights reserved.
           </div>
         </div>
       </div>

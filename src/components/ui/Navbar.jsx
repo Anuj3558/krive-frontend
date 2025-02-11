@@ -22,13 +22,13 @@ export default function Navbar() {
           {/* Logo */}
           <a href="/" className="flex flex-col items-start">
             <div>
-              <span className="text-2xl font-bold offside-regular text-white">Kri</span>
-              <span className="text-2xl font-light offside-regular text-white">Ve</span>
+              <span className="text-2xl font-bold offside-regular text-white">Thread &</span>
+              <span className="text-2xl font-light offside-regular text-white">Trend</span>
             </div>
             <div className="flex items-center mt-1">
               <p className="text-xs font-light offside-regular text-white">MADE WITH LOVE</p>
               <Heart className="h-3 w-3 text-white ml-1" />
-              <p className="text-xs font-light offside-regular text-white ml-1">IN INDORE</p>
+              <p className="text-xs font-light offside-regular text-white ml-1">IN PUNE</p>
             </div>
           </a>
 

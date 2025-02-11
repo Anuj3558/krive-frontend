@@ -1,36 +1,38 @@
-// DashboardOverview.jsx
-import { useState, useEffect } from "react"
-import { CircleDollarSign, Package, TrendingUp, Users, Download, RefreshCcw } from "lucide-react"
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
-import { Card, CardHeader, CardTitle, CardContent   } from "./Card"
-import { Alert, AlertDescription} from "./Alert"
+import { useState, useEffect } from "react";
+import { CircleDollarSign, Package, TrendingUp, Users, Download, RefreshCcw } from "lucide-react";
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { Card, CardHeader, CardTitle, CardContent } from "./Card";
+import { Alert, AlertDescription } from "./Alert";
+import Modal from "./Modal"; // Assuming you have a Modal component
 
 const DashboardOverview = () => {
-  const [orders, setOrders] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [successMessage, setSuccessMessage] = useState(null)
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null); // State to store the selected order for the modal
+  const [currentPage, setCurrentPage] = useState(1); // State to track the current page
+  const ordersPerPage = 7; // Number of orders per page
 
   useEffect(() => {
-    fetchOrders()
-  }, [])
+    fetchOrders();
+  }, []);
 
   const fetchOrders = async () => {
     try {
-      setLoading(true)
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/orders`)
-      if (!response.ok) throw new Error("Failed to fetch orders")
-      const data = await response.json()
-      setOrders(data)
-      console.log(orders )
-      setError(null)
-      setSuccessMessage("Orders loaded successfully")
+      setLoading(true);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/orders`);
+      if (!response.ok) throw new Error("Failed to fetch orders");
+      const data = await response.json();
+      setOrders(data);
+      setError(null);
+      setSuccessMessage("Orders loaded successfully");
     } catch (err) {
-      setError("Failed to load orders. Please try again.")
+      setError("Failed to load orders. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
@@ -40,25 +42,25 @@ const DashboardOverview = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ status: newStatus }),
-      })
+      });
 
-      if (!response.ok) throw new Error("Failed to update status")
+      if (!response.ok) throw new Error("Failed to update status");
 
-      fetchOrders()
-      setSuccessMessage("Order status updated successfully")
+      fetchOrders();
+      setSuccessMessage("Order status updated successfully");
     } catch (err) {
-      setError("Failed to update order status. Please try again.")
+      setError("Failed to update order status. Please try again.");
     }
-  }
+  };
 
   const exportToCSV = async () => {
     try {
-      setLoading(true)
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/orders?limit=all`)
-      if (!response.ok) throw new Error("Failed to fetch all orders")
-      const allOrders = await response.json()
+      setLoading(true);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/orders?limit=all`);
+      if (!response.ok) throw new Error("Failed to fetch all orders");
+      const allOrders = await response.json();
 
-      const headers = [ "Customer", "Product", "Customization", "Status", "Date"]
+      const headers = ["Customer", "Product", "Customization", "Status", "Date"];
       const csvData = allOrders.map((order) => [
         order._id,
         order.userDetails?.name,
@@ -67,25 +69,25 @@ const DashboardOverview = () => {
         order.product?.price,
         order.status,
         new Date(order.createdAt).toLocaleDateString(),
-      ])
+      ]);
 
-      const csvContent = [headers, ...csvData].map((row) => row.join(",")).join("\n")
+      const csvContent = [headers, ...csvData].map((row) => row.join(",")).join("\n");
 
-      const blob = new Blob([csvContent], { type: "text/csv" })
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = `orders-${new Date().toISOString().split("T")[0]}.csv`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
+      const blob = new Blob([csvContent], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `orders-${new Date().toISOString().split("T")[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
     } catch (err) {
-      setError("Failed to export orders. Please try again.")
+      setError("Failed to export orders. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const getStatusColor = (status) => {
     const colors = {
@@ -93,36 +95,36 @@ const DashboardOverview = () => {
       Processing: "bg-blue-100 text-blue-800",
       Completed: "bg-green-100 text-green-800",
       Cancelled: "bg-red-100 text-red-800",
-    }
-    return colors[status] || "bg-gray-100 text-gray-800"
-  }
+    };
+    return colors[status] || "bg-gray-100 text-gray-800";
+  };
 
   const getOrdersByStatus = () => {
     const statusCount = {
       Pending: 0,
       Processing: 0,
       Completed: 0,
-      Cancelled: 0
-    }
-    orders.forEach(order => {
-      statusCount[order.status] = (statusCount[order.status] || 0) + 1
-    })
-    return Object.entries(statusCount).map(([name, value]) => ({ name, value }))
-  }
+      Cancelled: 0,
+    };
+    orders.forEach((order) => {
+      statusCount[order.status] = (statusCount[order.status] || 0) + 1;
+    });
+    return Object.entries(statusCount).map(([name, value]) => ({ name, value }));
+  };
 
   const getOrdersByDate = () => {
-    const dateGroups = {}
-    orders.forEach(order => {
-      const date = new Date(order.createdAt).toLocaleDateString()
-      dateGroups[date] = (dateGroups[date] || 0) + 1
-    })
+    const dateGroups = {};
+    orders.forEach((order) => {
+      const date = new Date(order.createdAt).toLocaleDateString();
+      dateGroups[date] = (dateGroups[date] || 0) + 1;
+    });
     return Object.entries(dateGroups)
       .map(([date, count]) => ({ date, count }))
-      .slice(-7) // Last 7 days
-  }
+      .slice(-7); // Last 7 days
+  };
 
-  const COLORS = ['#FCD34D', '#60A5FA', '#34D399', '#F87171']
-  
+  const COLORS = ['#FCD34D', '#60A5FA', '#34D399', '#F87171'];
+
   const stats = [
     {
       title: "Total Orders",
@@ -144,7 +146,7 @@ const DashboardOverview = () => {
       value: orders.filter((order) => order.status !== "Completed").length,
       icon: Users,
     },
-  ]
+  ];
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -152,10 +154,29 @@ const DashboardOverview = () => {
         <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
           <p className="text-gray-700">{`${label}: ${payload[0].value}`}</p>
         </div>
-      )
+      );
     }
-    return null
-  }
+    return null;
+  };
+
+  const handleRowClick = (order) => {
+    setSelectedOrder(order);
+  };
+
+  const closeModal = () => {
+    setSelectedOrder(null);
+  };
+
+  // Pagination Logic
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  const totalPages = Math.ceil(orders.length / ordersPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="space-y-6 p-6">
@@ -274,78 +295,158 @@ const DashboardOverview = () => {
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
               </div>
             ) : (
-              <table className="w-full">
-                <thead className="bg-gray-50 w-full ">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Customer
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Product
-                    </th>   
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Customizations
-                    </th>
-                 
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {orders.map((order) => (
-                    <tr key={order._id} className="hover:bg-gray-50 transition-colors">
-                    
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {order.userDetails?.name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {order.product?.name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <select
-                          value={order.status}
-                          onChange={(e) => updateOrderStatus(order._id, e.target.value)}
-                          className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                            order.status
-                          )} border-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-                        >
-                          <option value="Pending">Pending</option>
-                          <option value="Processing">Processing</option>
-                          <option value="Completed">Completed</option>
-                          <option value="Cancelled">Cancelled</option>
-                        </select>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(order.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <button
-                          onClick={() => updateOrderStatus(order._id, "Completed")}
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          Complete
-                        </button>
-                      </td>
+              <>
+                <table className="w-full">
+                  <thead className="bg-gray-50 w-full ">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Customer
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Product
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Customizations
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {currentOrders.map((order) => (
+                      <tr
+                        key={order._id}
+                        className="hover:bg-gray-50 transition-colors cursor-pointer"
+                        onClick={() => handleRowClick(order)}
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {order.userDetails?.name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {order.product?.name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {JSON.stringify(order.selectedOptions)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <select
+                            value={order.status}
+                            onChange={(e) => updateOrderStatus(order._id, e.target.value)}
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+                              order.status
+                            )} border-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                          >
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                          </select>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {new Date(order.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          <button
+                            onClick={() => updateOrderStatus(order._id, "Completed")}
+                            className="text-indigo-600 hover:text-indigo-900"
+                          >
+                            Complete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                {/* Pagination Controls */}
+                <div className="flex justify-center mt-6">
+                  <nav className="inline-flex rounded-md shadow-sm">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50"
+                    >
+                      Previous
+                    </button>
+                    {Array.from({ length: totalPages }, (_, index) => (
+                      <button
+                        key={index + 1}
+                        onClick={() => handlePageChange(index + 1)}
+                        className={`px-4 py-2 text-sm font-medium ${
+                          currentPage === index + 1
+                            ? "text-indigo-600 bg-indigo-50"
+                            : "text-gray-500 bg-white"
+                        } border border-gray-300 hover:bg-gray-50`}
+                      >
+                        {index + 1}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50"
+                    >
+                      Next
+                    </button>
+                  </nav>
+                </div>
+              </>
             )}
           </div>
         </CardContent>
       </Card>
-    </div>
-  )
-}
 
-export default DashboardOverview
+      {/* Order Details Modal */}
+      {selectedOrder && (
+        <Modal isOpen={!!selectedOrder} onClose={closeModal}>
+          <div className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Order Details</h2>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-gray-500">Customer Name</p>
+                <p className="text-lg">{selectedOrder.userDetails?.name}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Customer Email</p>
+                <p className="text-lg">{selectedOrder.userDetails?.email}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Customer Phone</p>
+                <p className="text-lg">{selectedOrder.userDetails?.phone}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Customer Location</p>
+                <p className="text-lg">{selectedOrder.userDetails?.location}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Product</p>
+                <p className="text-lg">{selectedOrder.product?.name}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Customizations</p>
+                <p className="text-lg">{JSON.stringify(selectedOrder.selectedOptions)}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Status</p>
+                <p className="text-lg">{selectedOrder.status}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Order Date</p>
+                <p className="text-lg">{new Date(selectedOrder.createdAt).toLocaleDateString()}</p>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
+    </div>
+  );
+};
+
+export default DashboardOverview;

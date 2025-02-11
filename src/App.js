@@ -27,7 +27,7 @@ const PageLoadingAnimation = () => (
   >
     <div className="flex flex-col items-center">
       <div className="w-16 h-16 border-4 border-[#5f60b9] border-t-transparent rounded-full animate-spin"></div>
-      <p className='text-[#5f60b9]'>Krive</p>
+      <p className='text-[#5f60b9]'>Thread & Trend</p>
       <span className="mt-4 text-xl font-semibold text-[#5f60b9]">Loading...</span>
     </div>
   </motion.div>
@@ -41,7 +41,7 @@ const PageTransition = ({ children }) => {
     setIsLoading(true);
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000); // 1 second loading animation
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -103,11 +103,18 @@ const AppContent = () => {
     <div className="App relative">
       <ScrollToTop />
       <Helmet>
-        <title>Krive - Best Online Tailor & Darzi Services in Indore</title>
+        <title>Thread & Trend - Premium Custom Fashion & Tailoring Services</title>
         <meta
           name="description"
-          content="Krive offers the best online tailor and darzi services in Indore."
+          content="Thread & Trend offers bespoke tailoring services, custom clothing alterations, and personalized fashion solutions. Create your perfect look with our expert artisans."
         />
+        <meta
+          name="keywords"
+          content="custom tailoring, bespoke clothing, fashion alterations, personalized fashion, made-to-measure, clothing customization, premium tailoring, sustainable fashion"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://www.threadandtrend.com/og-image.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
 
       {!isDashboard && <Navbar />}
@@ -119,10 +126,10 @@ const AppContent = () => {
             element={
               <>
                 <Helmet>
-                  <title>Loading - Krive</title>
+                  <title>Welcome to Thread & Trend</title>
                   <meta
                     name="description"
-                    content="Welcome to Krive. Please wait while we load your experience."
+                    content="Crafting your perfect style experience - Loading..."
                   />
                 </Helmet>
                 <LoadingScreenWithRedirect />
@@ -134,10 +141,10 @@ const AppContent = () => {
             element={
               <PageTransition>
                 <Helmet>
-                  <title>Home - Krive</title>
+                  <title>Home - Thread & Trend | Custom Fashion Solutions</title>
                   <meta
                     name="description"
-                    content="Welcome to Krive, your one-stop destination for customisable and personalised fashion."
+                    content="Discover made-to-measure fashion with Thread & Trend. Create personalized clothing that fits perfectly and expresses your unique style."
                   />
                 </Helmet>
                 <HomePage />
@@ -149,10 +156,10 @@ const AppContent = () => {
             element={
               <PageTransition>
                 <Helmet>
-                  <title>Shop - Krive</title>
+                  <title>Custom Clothing Shop | Thread & Trend</title>
                   <meta
                     name="description"
-                    content="Shop the latest fashion trends at Krive."
+                    content="Explore our collection of customizable clothing. Choose from premium fabrics and design elements to create your perfect outfit."
                   />
                 </Helmet>
                 <CustomizationOptions />
@@ -164,10 +171,10 @@ const AppContent = () => {
             element={
               <PageTransition>
                 <Helmet>
-                  <title>About Us - Krive</title>
+                  <title>About Thread & Trend | Our Tailoring Philosophy</title>
                   <meta
                     name="description"
-                    content="Learn more about Krive and our mission to deliver customizable fashion tailored to your needs."
+                    content="Discover our commitment to sustainable fashion and precision tailoring. Thread & Trend combines traditional craftsmanship with modern design."
                   />
                 </Helmet>
                 <Aboutus />
@@ -179,10 +186,10 @@ const AppContent = () => {
             element={
               <PageTransition>
                 <Helmet>
-                  <title>Contact Us - Krive</title>
+                  <title>Contact Our Fashion Experts | Thread & Trend</title>
                   <meta
                     name="description"
-                    content="Get in touch with us for inquiries, support, or general questions."
+                    content="Get personalized fashion advice or schedule a consultation with our tailoring experts. We're here to help create your perfect look."
                   />
                 </Helmet>
                 <Contact />
@@ -194,10 +201,10 @@ const AppContent = () => {
             element={
               <PageTransition>
                 <Helmet>
-                  <title>Dashboard - Krive</title>
+                  <title>Client Dashboard | Thread & Trend</title>
                   <meta
                     name="description"
-                    content="Access your personal dashboard for managing your orders and preferences."
+                    content="Manage your custom orders, track alterations, and view your fashion profile. Your personalized style hub."
                   />
                 </Helmet>
                 <Dashboard />
@@ -209,98 +216,80 @@ const AppContent = () => {
             element={
               <PageTransition>
                 <Helmet>
-                  <title>Clothing Alterations & Tailoring Services | Krive</title>
+                  <title>Premium Alteration Services | Thread & Trend</title>
                   <meta
                     name="description"
-                    content="Professional clothing alteration services in Indore. Expert tailoring for all garments including suits, dresses, pants, and traditional wear. Same-day alterations available."
+                    content="Expert clothing alterations and tailoring services. Perfect fit guaranteed for all garments including formal wear, dresses, and traditional attire."
                   />
                   <meta
                     name="keywords"
-                    content="clothing alterations,Clothes Customization, garment alterations, tailoring services, dress alterations, suit alterations, pants hemming, size adjustment, clothing repair, seamstress services, professional tailor, same day alterations, traditional wear alterations, Indore tailor"
+                    content="clothing alterations, premium tailoring, garment adjustment, bespoke alterations, dress modifications, suit tailoring, sustainable fashion care"
                   />
-                  {/* Additional meta tags for SEO */}
-                  <meta property="og:title" content="Clothing Alterations & Tailoring Services | Krive" />
-                  <meta property="og:description" content="Professional clothing alteration services in Indore. Expert tailoring for all garments." />
-                  <meta name="twitter:title" content="Clothing Alterations & Tailoring Services | Krive" />
-                  <link rel="canonical" href="https://www.krive.com/alteration" />
+                  <meta property="og:title" content="Professional Alteration Services | Thread & Trend" />
+                  <meta property="og:description" content="Precision alterations for perfect fit and renewed style" />
+                  <link rel="canonical" href="https://www.threadandtrend.com/alteration" />
                 </Helmet>
                 <AlterationForm/>
               </PageTransition>
             }
           />
-      <Route
+          <Route
             path="/shop/customization"
             element={
               <PageTransition>
                 <Helmet>
-                  <title>Clothing Alterations & Tailoring Services | Krive</title>
+                  <title>Custom Clothing Design Studio | Thread & Trend</title>
                   <meta
                     name="description"
-                    content="Professional clothing alteration services in Indore. Expert tailoring for all garments including suits, dresses, pants, and traditional wear. Same-day alterations available."
+                    content="Design your perfect garment with our 3D customization studio. Mix fabrics, patterns, and styles to create unique pieces."
                   />
-                  <meta
-                    name="keywords"
-                    content="clothing alterations,Clothes Customization, garment alterations, tailoring services, dress alterations, suit alterations, pants hemming, size adjustment, clothing repair, seamstress services, professional tailor, same day alterations, traditional wear alterations, Indore tailor"
-                  />
-                  {/* Additional meta tags for SEO */}
-                  <meta property="og:title" content="Clothing Alterations & Tailoring Services | Krive" />
-                  <meta property="og:description" content="Professional clothing alteration services in Indore. Expert tailoring for all garments." />
-                  <meta name="twitter:title" content="Clothing Alterations & Tailoring Services | Krive" />
-                  <link rel="canonical" href="https://www.krive.com/alteration" />
                 </Helmet>
                 <ShopPage/>
               </PageTransition>
             }
-          /><Route
-          path="/shop/fabric-designer"
-          element={
-            <PageTransition>
-              <Helmet>
-                <title>Clothing Alterations & Tailoring Services | Krive</title>
-                <meta
-                  name="description"
-                  content="Professional clothing alteration services in Indore. Expert tailoring for all garments including suits, dresses, pants, and traditional wear. Same-day alterations available."
-                />
-                <meta
-                  name="keywords"
-                  content="clothing alterations,Clothes Customization, garment alterations, tailoring services, dress alterations, suit alterations, pants hemming, size adjustment, clothing repair, seamstress services, professional tailor, same day alterations, traditional wear alterations, Indore tailor"
-                />
-                {/* Additional meta tags for SEO */}
-                <meta property="og:title" content="Clothing Alterations & Tailoring Services | Krive" />
-                <meta property="og:description" content="Professional clothing alteration services in Indore. Expert tailoring for all garments." />
-                <meta name="twitter:title" content="Clothing Alterations & Tailoring Services | Krive" />
-                <link rel="canonical" href="https://www.krive.com/alteration" />
-              </Helmet>
-              <FabricDesigner/>
-            </PageTransition>
-          }
-        />
-    
-      
+          />
           <Route
-            path="/Login"
+            path="/shop/fabric-designer"
             element={
               <PageTransition>
                 <Helmet>
-                  <title>Login Krive</title>
-                 
+                  <title>Digital Fabric Designer | Thread & Trend</title>
+                  <meta
+                    name="description"
+                    content="Create custom fabric patterns with our digital design tool. Bring your unique textile visions to life."
+                  />
                 </Helmet>
-                < AuthPage/>
+                <FabricDesigner/>
               </PageTransition>
             }
           />
           <Route
-            path="/sample"
+            path="/login"
             element={
               <PageTransition>
                 <Helmet>
-                  <title>Page Not Found - Krive</title>
+                  <title>Client Portal Login | Thread & Trend</title>
                   <meta
                     name="description"
-                    content="The page you are looking for does not exist."
+                    content="Access your personalized fashion profile and order management system."
                   />
                 </Helmet>
-                <FabricDesigner />
+                <AuthPage/>
+              </PageTransition>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <PageTransition>
+                <Helmet>
+                  <title>Page Not Found | Thread & Trend</title>
+                  <meta
+                    name="description"
+                    content="The style path you're looking for doesn't exist. Let's help you find the perfect fit."
+                  />
+                </Helmet>
+                <NotFoundPage />
               </PageTransition>
             }
           />

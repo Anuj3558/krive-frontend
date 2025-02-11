@@ -319,15 +319,7 @@ const ShopPage = () => {
                       className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
-                  {true && (
-                    <motion.span
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm"
-                    >
-                      New
-                    </motion.span>
-                  )}
+               
                 </div>
 
                 <div className="mt-4 flex justify-between items-start">

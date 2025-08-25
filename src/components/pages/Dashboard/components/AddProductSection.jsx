@@ -181,7 +181,7 @@ export const AddProductSection = () => {
                       <div className="flex items-center gap-2 md:gap-4">
                         {product.image && (
                           <img
-                            src={`${process.env.REACT_APP_BACKEND_URL}/${product.image}`}
+                            src={product.image}
                             alt={product.name}
                             className="w-12 h-12 md:w-16 md:h-16 object-cover rounded-lg"
                           />

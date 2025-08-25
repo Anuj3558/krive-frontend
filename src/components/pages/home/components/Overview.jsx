@@ -110,9 +110,9 @@ const ProductOverview = () => {
               <div className="relative overflow-hidden rounded-lg bg-white shadow-md cursor-pointer">
                 <div className="aspect-square relative">
                   <img
-                    src={`${process.env.REACT_APP_BACKEND_URL}/${product.image}` || '/placeholder.svg'}
+                    src={product.image || '/placeholder.svg'}
                     alt={product.name}
-                    className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 </div>
                 {product.isNew && (

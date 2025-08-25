@@ -52,7 +52,7 @@ const ShopPage = () => {
           axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/subcategories`),
           axios.get(`${process.env.REACT_APP_BACKEND_URL}/client/products`),
         ]);
-
+        console.log(productsResponse.data);
         setCategories(categoriesResponse.data);
         setSubcategories(subcategoriesResponse.data);
         setProducts(productsResponse.data);
@@ -192,7 +192,7 @@ const ShopPage = () => {
     >
       <div className="relative w-full h-[100px]">
         <img
-          src={`${process.env.REACT_APP_BACKEND_URL}/${image}` || '/placeholder.svg'}
+          src={image || '/placeholder.svg'}
           alt={title}
           className="w-full h-[100px] object-cover"
         />
@@ -314,9 +314,9 @@ const ShopPage = () => {
                 <div className="relative overflow-hidden rounded-lg bg-white shadow-md">
                   <div className="aspect-square relative">
                     <img
-                      src={`${process.env.REACT_APP_BACKEND_URL}/${product.image}` || '/placeholder.svg'}
+                      src={product.image || '/placeholder.svg'}
                       alt={product.name}
-                      className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+                      className="absolute  inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
                
@@ -411,12 +411,12 @@ const ShopPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 md:p-8">
                   <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
                     <img
-                      src={`${process.env.REACT_APP_BACKEND_URL}/${selectedProduct.image}` || '/placeholder.svg'}
+                      src={selectedProduct.image}
                       alt={selectedProduct.name}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-cover"
                     />
                   </div>
-
+                  {console.log(selectedProduct)}
                   <div className="space-y-6">
                     {selectedProduct.customizations?.map((category) => (
                       <div key={category.name}>

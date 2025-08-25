@@ -151,7 +151,7 @@ const AddCustomizationSection = () => {
                       className="flex items-center gap-2 p-2 bg-white rounded"
                     >
                       <img
-                        src={`${process.env.REACT_APP_BACKEND_URL}/${option.image}`}
+                        src={option.image}
                         alt={option.name}
                         className="w-6 h-6 md:w-8 md:h-8 object-cover rounded"
                       />
@@ -228,7 +228,7 @@ const AddCustomizationSection = () => {
                     type="file"
                     accept="image/*"
                     onChange={handleOptionImageUpload}
-                    className="w-full p-2 border rounded-lg text-sm md:text-base"
+                    className="w-full p-2 border rounded-lg text-sm md:text-ba  se"
                   />
                   {optionImage && (
                     <div className="mt-2">

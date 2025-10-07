@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.ac3d151c.css",
-    "main.js": "/static/js/main.7759f77f.js",
+    "main.js": "/static/js/main.60da8a9d.js",
     "static/media/Green_Pure_Banarasi_Lehenga_Set_by_Anjana_Bohra-removebg-preview.png": "/static/media/Green_Pure_Banarasi_Lehenga_Set_by_Anjana_Bohra-removebg-preview.6bb08640a33f80fa976a.png",
     "static/media/Hero bg.png": "/static/media/Hero bg.2b79f3d4819a3cdbe348.png",
     "static/media/MissJophiel_Halter_High_Neck_Floral_Print_Chiffon_High_Low_Dress-removebg-preview.png": "/static/media/MissJophiel_Halter_High_Neck_Floral_Print_Chiffon_High_Low_Dress-removebg-preview.dded77e53ce835611531.png",
@@ -26,10 +26,10 @@
     "static/media/Dark Green Black Burgundy Men's Wedding Suits 2 Piece Plus Size Solid Colored Peak Lapel Slim Fit Double Breasted Six-buttons 2024 2024 - $100_99.jpeg": "/static/media/Dark Green Black Burgundy Men's Wedding Suits 2 Piece Plus Size Solid Colored Peak Lapel Slim Fit Double Breasted Six-buttons 2024 2024 - $100_99.3675176ef848db67525b.jpeg",
     "index.html": "/index.html",
     "main.ac3d151c.css.map": "/static/css/main.ac3d151c.css.map",
-    "main.7759f77f.js.map": "/static/js/main.7759f77f.js.map"
+    "main.60da8a9d.js.map": "/static/js/main.60da8a9d.js.map"
   },
   "entrypoints": [
     "static/css/main.ac3d151c.css",
-    "static/js/main.7759f77f.js"
+    "static/js/main.60da8a9d.js"
   ]
 }
